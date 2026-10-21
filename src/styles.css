@@ -1,0 +1,314 @@
+/* Identidad de BNB Builder Session (placa en assets/placa-utn-1080x1350.png): negro y amarillo BNB (#f0b90b),
+   gris para etiquetas, JetBrains Mono en títulos y Geist en cuerpo. */
+:root {
+  color-scheme: dark;
+  --bg: #000000;
+  --ink: #efeee6;
+  --body: #cfd0d6;
+  --muted: #9a9eab;
+  --yellow: #f0b90b;
+  --on-yellow: #000000;
+  --peri: #8c8c8c;
+  --grid: #ffffff08;
+  --box: #0b0e11;
+  --box-line: #2a2a2a;
+  --rule: #f0b90b66;
+  --mono: "JetBrains Mono Variable", ui-monospace, monospace;
+  --sans: "Geist Variable", system-ui, sans-serif;
+  --ease-roll: cubic-bezier(0.165, 0.84, 0.44, 1); /* M-HOV-01, medido en offbrand */
+}
+* { box-sizing: border-box; margin: 0; }
+html, body, #root { min-height: 100%; }
+body {
+  background-color: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 40px 40px;
+  color: var(--body);
+  font: 400 16px/1.5 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+button { font: inherit; color: inherit; cursor: pointer; }
+:focus-visible { outline: 3px solid var(--yellow); outline-offset: 4px; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- piezas de @crisol/motion-kit (motion-kit.css) ---------- */
+/* M-REV-02: cada palabra en su máscara. El padding deja lugar a tildes y descendentes. */
+.words-clip { display: inline-block; overflow: clip; vertical-align: top; padding: 0.16em 0 0.145em; margin-top: -0.16em; }
+.words-clip .word { display: inline-block; will-change: transform; }
+
+/* ---------- menú ---------- */
+/* fondo de vgpu: se suma a la cuadrícula con blend screen (lo negro del canvas no tapa nada) y aparece con un fundido */
+.fondo { position: fixed; inset: 0; z-index: 0; width: 100%; height: 100%; pointer-events: none; opacity: 0; transition: opacity 1.6s ease-out; }
+.fondo[data-listo] { opacity: 1; }
+.menu { position: relative; z-index: 1; min-height: 100dvh; display: grid; grid-template-rows: auto 1fr auto; gap: clamp(12px, 3vh, 56px); padding: clamp(20px, 4vh, 56px) clamp(20px, 6vw, 112px); overflow: hidden; }
+.menu-top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; font: 700 clamp(0.7rem, 1vw, 0.9rem)/1.2 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--yellow); }
+.menu-top img { height: clamp(28px, 3.2vw, 44px); }
+.menu > nav { align-self: center; } /* el nav es el que ocupa la fila 1fr de la grilla */
+.lista { list-style: none; padding: 0; position: relative; z-index: 1; }
+.lista li + li { border-top: 1.5px dashed var(--rule); }
+.item { display: grid; grid-template-columns: 3.4ch 1fr; column-gap: clamp(12px, 2vw, 32px); align-items: baseline; padding: clamp(10px, 2vh, 32px) 0; color: var(--ink); text-decoration: none; }
+/* hover sutil: el título pasa a amarillo */
+.item-titulo > span { display: inline-block; line-height: 1.1; text-wrap: balance; transition: color 0.35s ease-out; }
+.item:hover .item-titulo > span, .item:focus-visible .item-titulo > span { color: var(--yellow); }
+.item-n { font: 700 clamp(0.8rem, 1.2vw, 1.1rem)/1 var(--mono); color: var(--peri); letter-spacing: 0.08em; }
+.item-titulo { display: block; overflow: clip; font: 800 clamp(1.35rem, 5.8vw, 7rem)/1 var(--mono); text-transform: uppercase; letter-spacing: -0.01em; }
+.item-bajada { grid-column: 2; margin-top: clamp(4px, 1vh, 12px); font-size: clamp(1rem, 1.5vw, 1.375rem); color: var(--body); }
+.menu-pie { display: flex; align-items: center; gap: 12px clamp(24px, 4vw, 64px); flex-wrap: wrap; color: var(--muted); font-size: 0.875rem; position: relative; z-index: 1; }
+.firma { display: flex; align-items: center; gap: 0.6em; }
+.firma img { height: 1.15em; }
+/* QR al sitio, a la derecha, a la altura de los títulos */
+.menu-qr { position: absolute; right: clamp(20px, 6vw, 112px); top: 50%; transform: translateY(-50%); z-index: 1; display: grid; justify-items: center; gap: clamp(10px, 1.4vh, 18px); color: var(--body); text-decoration: none; }
+.menu-qr img { width: clamp(140px, 22vh, 300px); aspect-ratio: 1; border-radius: 12px; border: 6px solid #fff; display: block; }
+.menu-qr span { display: grid; justify-items: center; gap: 4px; font: 500 clamp(0.7rem, 0.95vw, 0.9rem)/1.2 var(--mono); color: var(--muted); }
+.menu-qr b { font: 700 clamp(0.8rem, 1.1vw, 1rem)/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--yellow); }
+/* sponsors chicos al pie, en gris, a la derecha de la firma */
+.menu-sponsors { list-style: none; padding: 0; margin-left: auto; display: flex; align-items: center; gap: clamp(16px, 2.4vw, 40px); }
+.menu-sponsors img { height: clamp(18px, 2.6vh, 30px); width: auto; display: block; opacity: 0.7; }
+@media (max-width: 700px) {
+  .item { grid-template-columns: 1fr; row-gap: 6px; }
+  .item-bajada { grid-column: 1; }
+  .menu-qr { position: static; transform: none; justify-items: start; margin-top: 12px; }
+  .menu-sponsors { margin-left: 0; flex-wrap: wrap; }
+}
+
+/* ---------- cortina entre el menú y una charla ---------- */
+.cortina { position: fixed; inset: 0; z-index: 50; background: var(--yellow); visibility: hidden; pointer-events: none; }
+
+/* ---------- deck: lienzo fijo de 1920×1080 escalado. Todo lo de adentro se mide en px del lienzo. ---------- */
+.deck { position: fixed; inset: 0; z-index: 1; background: var(--bg); cursor: pointer; }
+/* con WebGPU el fondo lo dibuja el shader: el deck y el lienzo se vuelven transparentes y la cuadrícula del CSS se apaga */
+body[data-gpu] { background-image: none; }
+body[data-gpu] .deck, body[data-gpu] .stage { background: transparent; }
+.stage-box { position: absolute; inset: 0; overflow: hidden; }
+.stage {
+  position: absolute; left: 50%; top: 50%; width: 1920px; height: 1080px; transform-origin: center; overflow: hidden;
+  background-color: var(--bg);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+.slide { position: absolute; inset: 0; padding: 110px 120px 130px; }
+.hud { position: absolute; left: 120px; right: 120px; bottom: 50px; display: flex; justify-content: space-between; align-items: center; font: 500 24px/1 var(--mono); color: var(--muted); }
+.hud b { color: var(--ink); font-weight: 700; }
+.hud-menu { background: none; border: 0; padding: 14px 0; color: var(--muted); transition: color 0.3s ease-out; }
+.hud-menu:hover { color: var(--yellow); }
+.avance { position: absolute; left: 0; right: 0; bottom: 0; height: 8px; background: #ffffff12; }
+.avance i { display: block; height: 100%; background: var(--yellow); transform-origin: left; transition: transform 0.6s var(--ease-roll); }
+
+/* tipografía de slide, reutilizable por cualquier charla */
+.slide .kicker { font: 700 26px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--peri); }
+.slide h1 { font: 800 112px/1.02 var(--mono); text-transform: uppercase; letter-spacing: -0.01em; color: var(--ink); }
+.slide .cuerpo { font: 400 40px/1.3 var(--sans); color: var(--body); max-width: 1300px; }
+.slide code { font: 500 0.82em/1 var(--mono); color: var(--ink); background: var(--box); border: 1.5px solid var(--box-line); border-radius: 10px; padding: 0.12em 0.4em; }
+
+/* slide de relleno */
+.vacia .numero { font: 800 300px/0.9 var(--mono); color: var(--yellow); margin-top: 60px; letter-spacing: -0.03em; }
+.vacia h1 { margin-top: 36px; }
+.vacia .cuerpo { margin-top: 36px; }
+.pasos-demo { display: grid; gap: 14px; margin-top: 44px; }
+.pasos-demo .cuerpo { margin-top: 0; color: var(--ink); }
+
+/* ---------- modo presentador ---------- */
+.pres { display: grid; height: 100dvh; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr); grid-template-rows: minmax(0, auto) minmax(0, 1fr); grid-template-areas: "actual actual notas" "sigue crono notas"; background: var(--bg); }
+.pres > section { padding: 20px 24px; min-width: 0; min-height: 0; }
+.pres h2, .pres-actual header { font: 700 0.75rem/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.pres-actual { grid-area: actual; border-bottom: 1px solid var(--box-line); }
+.pres-actual header { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 14px; }
+.pres-actual header span:first-child { color: var(--yellow); }
+.pres-lienzo { position: relative; aspect-ratio: 16 / 9; border: 1px solid var(--box-line); }
+.pres-titulo { margin-top: 12px; color: var(--ink); font-weight: 500; }
+.pres-sigue { grid-area: sigue; border-right: 1px solid var(--box-line); display: flex; flex-direction: column; }
+/* la miniatura de lo que sigue usa el alto que quede: el lienzo se escala solo adentro */
+.pres-sigue .pres-lienzo { margin-top: 14px; flex: 1; min-height: 0; aspect-ratio: auto; }
+.pres-crono { grid-area: crono; display: flex; flex-direction: column; }
+.pres-reloj { font: 500 clamp(2rem, 4.4vw, 4rem)/1 var(--mono); color: var(--ink); font-variant-numeric: tabular-nums; margin: auto 0; }
+.pres-botones { display: flex; flex-wrap: wrap; gap: 8px; }
+.pres-botones button { min-height: 44px; padding: 0 16px; border-radius: 8px; border: 1px solid var(--box-line); background: var(--box); font: 700 0.8rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; transition: border-color 0.2s ease-out; }
+.pres-botones button:hover { border-color: var(--yellow); }
+.pres-notas { grid-area: notas; border-left: 1px solid var(--box-line); overflow-y: auto; }
+.pres-notas p { margin-top: 18px; font-size: clamp(1.1rem, 1.7vw, 1.6rem); line-height: 1.5; color: var(--ink); white-space: pre-wrap; text-wrap: pretty; }
+.pres-vacio { display: grid; place-items: center; padding: 24px; text-align: center; font-size: 1.25rem; color: var(--body); }
+
+@media (prefers-reduced-motion: reduce) {
+  .item-titulo > span, .avance i, .hud-menu { transition: none; }
+}
+
+/* ---------- charla: Bienvenidos ---------- */
+/* Cada slide ocupa el alto útil del lienzo: título arriba, contenido anclado abajo. */
+.bv { height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+.bv h1 { text-wrap: balance; }
+.bv-etq { display: block; font: 700 26px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--peri); }
+
+.bv-portada { justify-content: center; gap: 48px; }
+.bv-portada h1 { font-size: 150px; max-width: 1250px; }
+.bv-x { font: 800 150px/1.02 var(--mono); color: var(--yellow); text-transform: uppercase; }
+/* los mismos logos que la placa (assets/placa-utn), en el mismo orden, más chicos que el título */
+.bv-logos { display: flex; align-items: center; gap: 40px; }
+.bv-logos img { height: 34px; }
+.bv-logos img:first-child { height: 46px; }
+.bv-logos img[src*="sistemas"], .bv-logos img[src*="undercode"] { height: 44px; }
+/* PCN: el wordmark en texto y el isotipo en alta, como en la placa oficial */
+.bv-pcn { display: flex; align-items: center; gap: 8px; font: 800 32px/1 var(--sans); color: #fff; letter-spacing: -0.02em; }
+.bv-logos .bv-pcn img { height: 26px; }
+.bv-cierre h1 { font-size: 150px; color: var(--yellow); }
+.bv-qrs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
+.bv-qr-par { position: relative; width: 420px; height: 420px; }
+.bv-qr-par img { position: absolute; border-radius: 16px; display: block; }
+.bv-qr-foto { left: 0; top: 0; width: 330px; height: 330px; object-fit: cover; filter: brightness(0.75); }
+.bv-qr-img { left: 170px; top: 170px; width: 250px; height: 250px; image-rendering: pixelated; border: 4px solid var(--bg); }
+.bv-qrs figcaption { margin-top: 24px; font: 800 36px/1.1 var(--mono); color: var(--ink); text-transform: uppercase; }
+.bv-carpincho { position: absolute; right: 120px; bottom: 130px; width: 440px; }
+/* QR al sitio, arriba a la derecha de la portada, para seguir las slides desde el celular */
+.bv-qr-sitio { position: absolute; right: 120px; top: 110px; display: grid; justify-items: end; gap: 18px; text-decoration: none; text-align: right; }
+.bv-qr-sitio img { width: 260px; height: 260px; border-radius: 16px; border: 6px solid var(--ink); image-rendering: pixelated; }
+.bv-qr-sitio span { font: 700 24px/1.25 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--yellow); }
+
+.bv-equipo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
+.bv-equipo .bv-foto { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 16px; display: block; }
+.bv-equipo figcaption { display: grid; gap: 12px; margin-top: 32px; font: 500 30px/1.2 var(--sans); color: var(--body); }
+.bv-equipo b { font: 800 40px/1.1 var(--mono); color: var(--ink); text-transform: uppercase; }
+
+/* mapa de Latinoamérica: texto y lista a la izquierda, mapa a la derecha; con el paso entran las sesiones que faltan */
+.bv-latam { display: grid; grid-template-columns: 1fr 520px; gap: 80px; align-items: end; }
+.bv-latam-texto { display: grid; grid-template-rows: auto 1fr; gap: 40px; }
+.bv-latam-a, .bv-latam-b { grid-area: 1 / 1; transition: opacity 0.6s var(--ease-roll), transform 0.6s var(--ease-roll); }
+.bv-latam-texto p { margin-top: 20px; font: 400 44px/1.25 var(--sans); color: var(--body); text-wrap: pretty; }
+.bv-latam-texto b { color: var(--ink); font-weight: 700; }
+.bv-latam-b, .bv-latam[data-todas] .bv-latam-a { opacity: 0; transform: translateY(24px); }
+.bv-latam[data-todas] .bv-latam-b { opacity: 1; transform: none; transition-delay: 0.35s; }
+.bv-sesiones { grid-area: 2 / 1; list-style: none; padding: 0; columns: 2; column-gap: 60px; font: 400 28px/1.2 var(--sans); }
+.bv-sesiones li { display: grid; grid-template-columns: 110px 1fr auto; gap: 16px; align-items: baseline; padding: 7px 0; border-bottom: 1.5px dashed var(--rule); break-inside: avoid; transition: opacity 0.5s var(--ease-roll); }
+.bv-sesiones li span { font: 700 24px/1 var(--mono); color: var(--peri); }
+.bv-sesiones li b { font-weight: 600; color: var(--ink); }
+.bv-sesiones li i { font: 700 22px/1 var(--mono); font-style: normal; color: var(--muted); }
+.bv-sesiones .bv-falta { opacity: 0.18; }
+.bv-latam[data-todas] .bv-sesiones .bv-falta { opacity: 1; }
+.bv-latam[data-todas] .bv-sesiones .bv-aca b, .bv-latam[data-todas] .bv-sesiones .bv-aca span { color: var(--yellow); }
+.bv-latam svg { width: 520px; height: auto; display: block; overflow: visible; }
+.bv-paises { fill: var(--peri); fill-opacity: 0.3; stroke: var(--bg); stroke-width: 1; stroke-linejoin: round; }
+.bv-puntos circle { fill: var(--yellow); stroke: var(--bg); stroke-width: 1.2; }
+.bv-puntos text { font: 600 13px var(--sans); fill: var(--ink); paint-order: stroke; stroke: var(--bg); stroke-width: 3.5px; stroke-linejoin: round; }
+.bv-puntos .bv-falta circle { fill: var(--bg); stroke: var(--yellow); stroke-width: 1.6; }
+.bv-puntos .bv-aca circle { fill: var(--yellow); stroke: var(--ink); stroke-width: 2; }
+.bv-puntos .bv-aca text { font-weight: 800; font-size: 16px; fill: var(--yellow); }
+@media (prefers-reduced-motion: reduce) { .bv-latam-a, .bv-latam-b, .bv-sesiones li { transition: none; } }
+
+/* la noche como pista: cada bloque ocupa en la barra lo que dura */
+.bv-dia { --col: 150px 720px 1fr; }
+.bv-dia-horas { position: relative; margin-left: calc(150px + 720px + 2 * 40px); height: 40px; font: 700 26px/1 var(--mono); color: var(--muted); }
+.bv-dia-horas span { position: absolute; top: 0; transform: translateX(-50%); }
+.bv-dia ol { list-style: none; padding: 0; }
+.bv-dia li { display: grid; grid-template-columns: var(--col); gap: 40px; align-items: center; padding: 14px 0; border-bottom: 1.5px dashed var(--rule); }
+.bv-dia-ini { font: 700 40px/1.2 var(--mono); color: var(--peri); }
+.bv-dia-nombre { font: 600 42px/1.2 var(--sans); color: var(--ink); white-space: nowrap; }
+.bv-dia-pista { position: relative; height: 28px; }
+.bv-dia-pista i { position: absolute; top: 0; bottom: 0; border-radius: 6px; background: var(--peri); }
+.bv-dia .bv-ahora .bv-dia-ini, .bv-dia .bv-ahora .bv-dia-nombre { color: var(--yellow); }
+.bv-dia .bv-ahora .bv-dia-pista i { background: var(--yellow); }
+
+/* ---------- piezas comunes de slide (traídas de las charlas de Colosseum) ---------- */
+/* Cada slide ocupa el alto útil del lienzo: título arriba, contenido anclado abajo, mismo borde izquierdo. */
+.bv { height: 100%; display: flex; flex-direction: column; justify-content: space-between; }
+.bv h1 { text-wrap: balance; }
+.bv-etq { display: block; font: 700 26px/1 var(--mono); letter-spacing: 0.14em; text-transform: uppercase; color: var(--peri); }
+.bv-bajada { font: 400 44px/1.3 var(--sans); color: var(--body); text-wrap: pretty; }
+.bv-gap-s { margin-top: 36px; }
+.bv-ojo { color: var(--yellow); font-weight: 700; }
+.bv-centro { justify-content: center; gap: 40px; }
+.sl-portada { justify-content: center; gap: 48px; }
+.sl-portada h1 { font-size: 150px; max-width: 1500px; }
+.sl-frase { font: 600 76px/1.15 var(--sans); color: var(--ink); max-width: 1500px; text-wrap: balance; }
+.sl-frase em { font-style: normal; color: var(--yellow); }
+.sl-remate { margin-top: 48px; font: 800 80px/1 var(--mono); color: var(--yellow); text-transform: uppercase; }
+.cd-pila { display: grid; gap: 40px; }
+.cd-prompt { padding: 36px 44px; border-radius: 16px; border: 2px solid var(--peri); background: var(--box); }
+.cd-prompt p { margin-top: 20px; font: 500 52px/1.3 var(--sans); color: var(--ink); text-wrap: pretty; }
+.cd-prompt mark { background: none; color: var(--yellow); }
+
+/* ---------- charla: Workshop (ws-) ---------- */
+.chars-w { display: inline-block; white-space: nowrap; }
+.char { display: inline-block; will-change: transform; }
+.slide h1 .chars { overflow: clip; padding: 0.1em 0; margin: -0.1em 0; }
+.ws-chip { width: fit-content; padding: 14px 28px; border: 2px solid var(--yellow); border-radius: 999px; font: 500 32px/1 var(--mono); color: var(--yellow); }
+/* la regla amarilla de cada columna es un elemento propio para poder crecer desde la izquierda */
+.ws-regla { display: block; height: 4px; background: var(--yellow); margin-bottom: 28px; transform-origin: left; }
+/* tres negocios / tres límites: columnas con regla amarilla arriba */
+.ws-tres { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; }
+.ws-tres > div, .ws-tres > div > div { display: grid; align-content: start; gap: 18px; }
+.ws-tres b { font: 800 84px/1 var(--mono); color: var(--yellow); text-transform: uppercase; text-wrap: balance; }
+.ws-tres span { font: 500 36px/1.2 var(--sans); color: var(--body); }
+.ws-tres em { font: 700 26px/1 var(--mono); font-style: normal; letter-spacing: 0.12em; text-transform: uppercase; color: var(--peri); transition: color 0.5s ease-out; }
+.ws-tres-chica b { font-size: 64px; color: var(--ink); }
+.slide[data-step="3"] .ws-tres-chica em { color: var(--yellow); }
+/* chats: cliente a la izquierda, vendedor a la derecha en amarillo */
+.ws-chats { display: grid; gap: 16px; }
+.ws-par { display: grid; gap: 16px; }
+.ws-burbuja { width: fit-content; max-width: 1100px; padding: 16px 36px; border-radius: 40px; font: 500 40px/1.2 var(--sans); color: var(--ink); background: var(--box); border: 2px solid var(--box-line); will-change: transform; }
+.ws-burbuja[data-de="v"] { margin-left: auto; background: var(--yellow); color: var(--on-yellow); border-color: var(--yellow); }
+.ws-dialogo { gap: 14px; }
+.ws-turno { display: grid; gap: 8px; }
+.ws-turno[data-de="v"] { justify-items: end; }
+.ws-fantasma { position: absolute; left: 120px; bottom: 200px; font-size: 32px; padding: 12px 28px; opacity: 0; }
+/* chatbot vs agente: cuando entra el agente, el chatbot se corre y se apaga */
+.ws-vs { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: end; }
+.ws-vs .ws-col { display: grid; gap: 20px; padding-top: 32px; border-top: 4px solid var(--box-line); transition: transform 0.8s var(--ease-roll), opacity 0.8s ease-out; }
+.ws-vs b { font: 800 96px/1 var(--mono); color: var(--ink); text-transform: uppercase; text-wrap: balance; }
+.ws-vs .ws-vs-si { border-top-color: var(--yellow); }
+.ws-vs .ws-vs-si b { color: var(--yellow); }
+.slide[data-step="1"] .ws-vs .ws-col:first-child { transform: translateX(-40px); opacity: 0.45; }
+/* el loop: cuatro nodos en fila, las flechas en un SVG encima que se dibujan por paso */
+.ws-loop-caja { position: relative; padding-bottom: 120px; }
+.ws-cadena { display: grid; grid-template-columns: repeat(4, 340px); justify-content: space-between; }
+.ws-nodo { display: grid; align-content: start; gap: 16px; min-height: 240px; padding: 32px 26px; border-radius: 16px; border: 2px solid var(--box-line); background: var(--box); }
+.ws-nodo b { font: 800 40px/1 var(--mono); color: var(--ink); text-transform: uppercase; }
+.ws-nodo span { font: 400 32px/1.25 var(--sans); color: var(--body); }
+.ws-nodo[data-llm] { border-color: var(--yellow); }
+.ws-nodo[data-llm] b { color: var(--yellow); }
+.ws-loop { position: absolute; left: 0; top: 0; width: 1680px; height: 360px; pointer-events: none; overflow: visible; }
+.ws-trazo { fill: none; stroke: var(--peri); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
+.ws-loop [data-paso="4"] { stroke: var(--yellow); }
+/* la caja literal: rectángulo que se dibuja alrededor de los tres límites */
+.ws-caja { position: relative; padding: 48px 56px; }
+.ws-caja > svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.ws-caja rect { stroke: var(--yellow); }
+/* las piezas: la esfera a la izquierda, la lista a la derecha */
+.ws-piezas { display: grid; grid-template-columns: 560px 1fr; gap: 60px; align-items: center; }
+.ws-esfera { position: relative; aspect-ratio: 1; }
+.ws-esfera-portada { position: absolute; right: 40px; top: 50%; width: 900px; height: 900px; transform: translateY(-50%); z-index: -1; }
+.ws-esfera-cierre { position: absolute; right: 100px; top: 40px; width: 480px; height: 480px; }
+.ws-cierre-bajada { max-width: 1150px; }
+.ws-lista { list-style: none; padding: 0; }
+.ws-lista li { display: grid; grid-template-columns: 460px 1fr; align-items: baseline; gap: 32px; padding: 22px 0; border-top: 1.5px dashed var(--rule); }
+.ws-lista b { font: 800 44px/1.1 var(--mono); color: var(--ink); text-transform: uppercase; }
+.ws-lista span { font: 400 34px/1.25 var(--sans); color: var(--body); }
+.ws-lista li code, .slide .ws-lista code { font-size: 36px; color: var(--yellow); }
+/* guardrails: número, regla, cómo. Cuando entra la regla 3, las otras dos bajan y la 3 se pinta */
+.ws-reglas { list-style: none; padding: 0; }
+.ws-reglas li { display: grid; grid-template-columns: 80px 620px 1fr; align-items: baseline; gap: 32px; padding: 24px 0; border-top: 1.5px dashed var(--rule); transition: opacity 0.6s ease-out; }
+.ws-reglas span { font: 800 52px/1 var(--mono); color: var(--yellow); }
+.ws-reglas b { font: 700 48px/1.1 var(--sans); color: var(--ink); transition: color 0.6s ease-out; }
+.ws-reglas em { font: 400 36px/1.25 var(--sans); font-style: normal; color: var(--body); }
+.slide[data-step="3"] .ws-reglas > div:not(:nth-child(3)) li, .slide[data-step="4"] .ws-reglas > div:not(:nth-child(3)) li { opacity: 0.4; }
+.slide[data-step="3"] .ws-reglas > div:nth-child(3) b, .slide[data-step="4"] .ws-reglas > div:nth-child(3) b { color: var(--yellow); }
+.ws-ataque { border-style: dashed; }
+/* por qué on-chain: la bajada se atenúa cuando entra la cita */
+.ws-atenua { transition: opacity 0.6s ease-out; }
+.slide:not([data-step="0"]) .ws-atenua { opacity: 0.35; }
+.ws-cita { font-size: 64px; max-width: 1600px; }
+.ws-estandares { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 48px; }
+.ws-estandares > div { display: grid; gap: 14px; }
+.ws-estandares b { font: 800 72px/1 var(--mono); color: var(--yellow); }
+.ws-estandares span { font: 400 36px/1.2 var(--sans); color: var(--body); }
+/* studio en una frase */
+.ws-cuatro { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+.ws-cuatro b { display: block; font: 800 60px/1 var(--mono); color: var(--ink); text-transform: uppercase; }
+.ws-cuatro .ws-regla { background: var(--box-line); }
+/* cierre */
+.slide h1.ws-cierre { font-size: 150px; color: var(--yellow); }
+.ws-pie { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 60px; }
+.ws-pie > div { display: grid; gap: 16px; }
+.ws-pie .ws-regla { background: var(--box-line); margin-bottom: 12px; }
+.ws-pie b { font: 700 40px/1.1 var(--mono); color: var(--ink); overflow-wrap: anywhere; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ws-vs .ws-col, .ws-reglas li, .ws-reglas b, .ws-atenua, .ws-tres em { transition: none; }
+}

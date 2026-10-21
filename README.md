@@ -2,7 +2,7 @@
 
 Sitio de las charlas del jueves 22 de octubre de 2026 en la UTN FRT (SUM 3, Rivadavia 1050). Copia pelada del sitio de Road to Colosseum (`../../2026-09-28-superteam-colosseum/charlas/`) con la paleta negro y amarillo de BNB.
 
-En vivo: https://charlas-bnb-tucuman.vercel.app (proyecto `charlas-bnb-tucuman` en Vercel, cuenta `francoperez03s-projects`, publicado el 2026-10-21 desde la CLI, sin repo). Publicar: `npm run build && vercel deploy --prod --yes --scope francoperez03s-projects`. [INPUT] repo en GitHub; `scripts/pages.sh` ya apunta a `charlas-bnb-tucuman` para el respaldo en Pages cuando exista.
+En vivo: https://charlas-bnb-tucuman.vercel.app (proyecto `charlas-bnb-tucuman` en Vercel, cuenta `francoperez03s-projects`, conectado al repo https://github.com/francoperez03/charlas-bnb-tucuman desde el 2026-10-21: cada push a `main` se publica solo). Respaldo en GitHub Pages con `npm run pages`.
 
 ## Qué es
 

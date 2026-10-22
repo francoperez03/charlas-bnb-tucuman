@@ -55,14 +55,15 @@ const PIEZAS: [string, string][] = [
   ['Wallet + identity', 'una clave privada: firmar es autorizar un pago con ella; y quién es on-chain'],
 ]
 
-// Las mismas capas en Studio: [capa, quién la pone y cómo, de]. Fuente: agentes/.claude/skills/bnbagent-studio/SKILL.md.
+// Las mismas capas en Studio: [capa, qué genera `bag init` y qué hacés vos, de]. Fuente: el scaffold de studio-cli 0.0.13
+// (agentes/alerta-bnb y robot-a): unifiedMain.ts, tools.ts, signing.ts, requestLimits.ts, studio.toml.
 const PIEZAS_STUDIO: [string, string, 'studio' | 'vos'][] = [
-  ['LLM', 'gateway Pieverse, auto/free por defecto', 'studio'],
-  ['System prompt', 'lo definís vos', 'vos'],
-  ['Tools', 'las definís vos, con tool() del AI SDK', 'vos'],
-  ['Memory', 'tu catálogo y tus pedidos', 'vos'],
-  ['Guardrails', 'negotiate acota el precio por reglas; ningún LLM toca la plata', 'studio'],
-  ['Wallet + identity', 'la firma de pagos es código fijo, nunca una tool; ERC-8004', 'studio'],
+  ['LLM', 'Pieverse con auto/free, en studio.toml', 'studio'],
+  ['System prompt', 'trae uno genérico en inglés: lo reescribís', 'vos'],
+  ['Tools', 'trae 9 de lectura; las tuyas, con tool()', 'vos'],
+  ['Memory', 'no viene: cada pedido arranca de cero', 'vos'],
+  ['Guardrails', 'precio con tope y 8 vueltas como máximo', 'studio'],
+  ['Wallet + identity', 'firma fuera de las tools; ERC‑8004', 'studio'],
 ]
 
 // Las mismas capas en Claude Code: tiene todas las de adentro y le falta la de afuera. Es el puente a Studio.
@@ -821,7 +822,7 @@ const slides: Slide[] = [
   {
     titulo: 'Las capas, en Studio',
     pasos: 6,
-    notas: 'La misma esfera de antes, ahora con quién pone cada capa. En amarillo lo que trae Studio, en blanco lo que definís vos.\n\n→ El LLM: Studio lo conecta al gateway de Pieverse, con auto/free por defecto. Se puede cambiar por un modelo pago.\n\n→ El system prompt: tuyo.\n\n→ Las tools: tuyas, con tool() del AI SDK. Studio te deja las de lectura de la cadena.\n\n→ La memory: tu catálogo y tus pedidos.\n\n→ Los guardrails de plata vienen puestos: negotiate acota el precio con reglas, y ningún LLM toca la plata.\n\n→ Y la wallet: la firma de pagos es código fijo, nunca una tool que el modelo pueda pedir. Es la respuesta a "qué puede salir mal": las defensas ya vienen.',
+    notas: 'La misma esfera de antes, ahora con quién pone cada capa. En amarillo lo que trae Studio, en blanco lo que definís vos.\n\n→ El LLM: Studio lo conecta al gateway de Pieverse, con auto/free, gratis. Está en studio.toml y se puede cambiar por un modelo pago.\n\n→ El system prompt: bag init deja uno genérico en inglés, "You are a seller agent". Está en unifiedMain.ts y es lo primero que reescriben: quién es, qué vende, cómo responde.\n\n→ Las tools, en la misma capa: vienen 9 de solo lectura de la cadena, como saldos, estado de un job o datos de un agente. Las suyas las suman en tools.ts con tool() del AI SDK. Ojo: todas viajan al modelo en cada pedido, así que conviene dejar solo las que usa.\n\n→ La memory no viene. Cada pedido es una sola llamada: el modelo recibe el pedido que leyó de la cadena y nada más. El catálogo y lo que quieran que recuerde, lo suman ustedes.\n\n→ Los guardrails vienen puestos. El precio sale de studio.toml, con mínimo y máximo, y el modelo nunca lo toca. El loop corta a las 8 vueltas, las tools del modelo son solo de lectura y hay un límite de pedidos por minuto.\n\n→ Y la wallet: la firma de pagos es código fijo en signing.ts, nunca una tool que el modelo pueda pedir. La identidad es ERC-8004. Es la respuesta a "qué puede salir mal": las defensas ya vienen.',
     contenido: () => (
       <div className="bv">
         <h1><WordsIn text="Las capas, en Studio" /></h1>

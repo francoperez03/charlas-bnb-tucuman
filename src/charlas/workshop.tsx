@@ -62,7 +62,7 @@ const PIEZAS_STUDIO: [string, string, 'studio' | 'vos'][] = [
   ['System prompt', 'trae uno genérico en inglés: lo reescribís', 'vos'],
   ['Tools', 'trae 9 de lectura; las tuyas, con tool()', 'vos'],
   ['Memory', 'no viene: cada pedido arranca de cero', 'vos'],
-  ['Guardrails', 'precio con tope y 8 vueltas como máximo', 'studio'],
+  ['Guardrails', 'precio fijo y 8 vueltas como máximo', 'studio'],
   ['Wallet + identity', 'firma fuera de las tools; ERC‑8004', 'studio'],
 ]
 
@@ -822,7 +822,7 @@ const slides: Slide[] = [
   {
     titulo: 'Las capas, en Studio',
     pasos: 6,
-    notas: 'La misma esfera de antes, ahora con quién pone cada capa. En amarillo lo que trae Studio, en blanco lo que definís vos.\n\n→ El LLM: Studio lo conecta al gateway de Pieverse, con auto/free, gratis. Está en studio.toml y se puede cambiar por un modelo pago.\n\n→ El system prompt: bag init deja uno genérico en inglés, "You are a seller agent". Está en unifiedMain.ts y es lo primero que reescriben: quién es, qué vende, cómo responde.\n\n→ Las tools, en la misma capa: vienen 9 de solo lectura de la cadena, como saldos, estado de un job o datos de un agente. Las suyas las suman en tools.ts con tool() del AI SDK. Ojo: todas viajan al modelo en cada pedido, así que conviene dejar solo las que usa.\n\n→ La memory no viene. Cada pedido es una sola llamada: el modelo recibe el pedido que leyó de la cadena y nada más. El catálogo y lo que quieran que recuerde, lo suman ustedes.\n\n→ Los guardrails vienen puestos. El precio sale de studio.toml, con mínimo y máximo, y el modelo nunca lo toca. El loop corta a las 8 vueltas, las tools del modelo son solo de lectura y hay un límite de pedidos por minuto.\n\n→ Y la wallet: la firma de pagos es código fijo en signing.ts, nunca una tool que el modelo pueda pedir. La identidad es ERC-8004. Es la respuesta a "qué puede salir mal": las defensas ya vienen.',
+    notas: 'La misma esfera de antes, ahora con quién pone cada capa. En amarillo lo que trae Studio, en blanco lo que definís vos.\n\n→ El LLM: Studio lo conecta al gateway de Pieverse, con auto/free, gratis. Está en studio.toml y se puede cambiar por un modelo pago.\n\n→ El system prompt: bag init deja uno genérico en inglés, "You are a seller agent". Está en unifiedMain.ts y es lo primero que reescriben: quién es, qué vende, cómo responde.\n\n→ Las tools, en la misma capa: vienen 9 de solo lectura de la cadena, como saldos, estado de un job o datos de un agente. Las suyas las suman en tools.ts con tool() del AI SDK. Ojo: todas viajan al modelo en cada pedido, así que conviene dejar solo las que usa.\n\n→ La memory no viene. Cada pedido es una sola llamada: el modelo recibe el pedido que leyó de la cadena y nada más. El catálogo y lo que quieran que recuerde, lo suman ustedes.\n\n→ Los guardrails vienen puestos. El precio es fijo, sale de studio.toml, y el modelo nunca lo toca. El tope máximo viene vacío: pónganlo antes de salir en serio. El loop corta a las 8 vueltas, las tools del modelo son solo de lectura y hay un límite de pedidos por minuto.\n\n→ Y la wallet: la firma de pagos es código fijo en signing.ts, nunca una tool que el modelo pueda pedir. La identidad es ERC-8004. Es la respuesta a "qué puede salir mal": las defensas ya vienen.',
     contenido: () => (
       <div className="bv">
         <h1><WordsIn text="Las capas, en Studio" /></h1>

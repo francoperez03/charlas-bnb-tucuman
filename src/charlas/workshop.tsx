@@ -13,7 +13,6 @@ gsap.registerPlugin(MotionPathPlugin)
 // La esfera (src/esfera) es el agente: sus capas son las de "Las capas", "Claude Code es un agente" y "Las capas, en Studio".
 // Fuentes: raw/slides-peru-agentes-onchain.md (guardrails, autonomía), agentes/red-flags/README.md (qué firma el código).
 
-const REPO = '[INPUT] github.com/.../vendedor' // repo del ejemplo que la sala clona
 
 // Hilo numérico de todo el deck: una rotisería, 3 empanadas a 1,5 U, 10 % desde 3 → 4,05 U; stock 24; el comprador paga hasta 5 U.
 
@@ -881,7 +880,7 @@ const slides: Slide[] = [
   },
   {
     titulo: 'Ahora ustedes',
-    notas: 'Dos horas. Cada equipo elige: turnos con seña, me llegó la plata, o el negocio de la mano levantada. El suyo, el de la familia, el que se les ocurra. Lo prueban contra el comprador del repo.\n\nA las 21:00, pitch de dos minutos: qué vende tu agente y qué compró el mío.\n\nSet and Earn: la campaña de BNB Chain va del 1 de octubre al 5 de noviembre. Registren la wallet antes de construir si quieren participar.\n\nY no están solos.',
+    notas: 'Dos horas. Cada equipo elige: turnos con seña, me llegó la plata, o el negocio de la mano levantada. El suyo, el de la familia, el que se les ocurra. Lo prueban contra un agente comprador.\n\nA las 21:00, pitch de dos minutos: qué vende tu agente y qué compró el mío.\n\nSet and Earn: la campaña de BNB Chain va del 1 de octubre al 5 de noviembre. Registren la wallet antes de construir si quieren participar.\n\nY no están solos.',
     coreografia: (_r, tl) => {
       tl.from('.ws-esfera-cierre', { scale: 0, autoAlpha: 0, duration: 1.4, ease: 'expo.out' }, 0.2)
       tl.from('.ws-pie .ws-regla', { scaleX: 0, transformOrigin: 'left', duration: 0.9, ease: 'expo.out', stagger: 0.12 }, 0.6)
@@ -894,7 +893,6 @@ const slides: Slide[] = [
           <p className="bv-bajada bv-gap-s ws-cierre-bajada" data-in>Anotate para presentarlo a las 21:00. Tres espacios para armar: <b className="bv-ojo">la biblioteca, las mesas del primer piso y los merenderos</b>.</p>
         </div>
         <div className="ws-pie">
-          <div data-in><i className="ws-regla" /><span className="bv-etq">Repo</span><b>{REPO}</b></div>
           <div data-in><i className="ws-regla" /><span className="bv-etq">Set and Earn</span><b>1 oct → 5 nov</b></div>
           <div data-in><i className="ws-regla" /><span className="bv-etq">Con 💛 por</span><b>Crisol</b></div>
         </div>

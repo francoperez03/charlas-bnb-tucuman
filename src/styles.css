@@ -493,7 +493,7 @@ body[data-gpu] .deck, body[data-gpu] .stage { background: transparent; }
 .ws-cuatro .ws-regla { background: var(--box-line); }
 /* cierre */
 .slide h1.ws-cierre { font-size: 150px; color: var(--yellow); }
-.ws-pie { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 60px; align-items: start; }
+.ws-pie { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start; }
 .ws-pie > div { display: grid; gap: 16px; }
 .ws-pie .ws-regla { background: var(--box-line); margin-bottom: 12px; }
 .ws-pie b { font: 700 40px/1.1 var(--mono); color: var(--ink); overflow-wrap: anywhere; }

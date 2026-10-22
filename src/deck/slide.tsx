@@ -4,6 +4,7 @@ import { gsap, REVEAL, reducedMotion } from '../motion/motion'
 // Una slide es un objeto: sumar una slide es sumar uno de estos al array de su charla.
 export type Slide = {
   titulo: string // para el presentador y el contador
+  acto?: string // parte de la historia; se ve abajo a la izquierda (ver charlas/index.ts)
   pasos?: number // cuántas partes se revelan de a una con →
   notas?: string // guion, se ve solo en el modo presentador
   contenido: () => ReactNode // lo que va en el lienzo de 1920×1080

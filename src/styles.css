@@ -240,21 +240,15 @@ body[data-gpu] .deck, body[data-gpu] .stage { background: transparent; }
 .ws-tres-chica b { font-size: 64px; color: var(--ink); }
 .slide[data-step="3"] .ws-tres-chica em { color: var(--yellow); }
 /* chats: cliente a la izquierda, vendedor a la derecha en amarillo */
-.ws-chats { display: grid; gap: 16px; }
+.ws-chats { display: grid; gap: 10px; }
 .ws-par { display: grid; gap: 16px; }
-.ws-burbuja { width: fit-content; max-width: 1100px; padding: 16px 36px; border-radius: 40px; font: 500 40px/1.2 var(--sans); color: var(--ink); background: var(--box); border: 2px solid var(--box-line); will-change: transform; }
+.ws-burbuja { width: fit-content; max-width: 1100px; padding: 12px 32px; border-radius: 40px; font: 500 36px/1.2 var(--sans); color: var(--ink); background: var(--box); border: 2px solid var(--box-line); will-change: transform; }
 .ws-burbuja[data-de="v"] { margin-left: auto; background: var(--yellow); color: var(--on-yellow); border-color: var(--yellow); }
 .ws-dialogo { gap: 14px; }
 .ws-turno { display: grid; gap: 8px; }
 .ws-turno[data-de="v"] { justify-items: end; }
 .ws-fantasma { position: absolute; left: 120px; bottom: 200px; font-size: 32px; padding: 12px 28px; opacity: 0; }
 /* chatbot vs agente: cuando entra el agente, el chatbot se corre y se apaga */
-.ws-vs { display: grid; grid-template-columns: 1fr 1.4fr; gap: 80px; align-items: end; }
-.ws-vs .ws-col { display: grid; gap: 20px; padding-top: 32px; border-top: 4px solid var(--box-line); transition: transform 0.8s var(--ease-roll), opacity 0.8s ease-out; }
-.ws-vs b { font: 800 96px/1 var(--mono); color: var(--ink); text-transform: uppercase; text-wrap: balance; }
-.ws-vs .ws-vs-si { border-top-color: var(--yellow); }
-.ws-vs .ws-vs-si b { color: var(--yellow); }
-.slide[data-step="1"] .ws-vs .ws-col:first-child { transform: translateX(-40px); opacity: 0.45; }
 /* el loop: cuatro nodos en fila, las flechas en un SVG encima que se dibujan por paso */
 .ws-loop-caja { position: relative; padding-bottom: 120px; }
 .ws-cadena { display: grid; grid-template-columns: repeat(4, 340px); justify-content: space-between; }
@@ -265,11 +259,171 @@ body[data-gpu] .deck, body[data-gpu] .stage { background: transparent; }
 .ws-nodo[data-llm] b { color: var(--yellow); }
 .ws-loop { position: absolute; left: 0; top: 0; width: 1680px; height: 360px; pointer-events: none; overflow: visible; }
 .ws-trazo { fill: none; stroke: var(--peri); stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; }
-.ws-loop [data-paso="4"] { stroke: var(--yellow); }
+.ws-loop [data-paso="3"] { stroke: var(--yellow); }
+.ws-luz { fill: var(--yellow); filter: drop-shadow(0 0 10px #f0b90b) drop-shadow(0 0 22px #f0b90b99); }
+.ws-nodo [data-modo="agente"], .slide:not([data-step="0"]) .ws-nodo [data-modo="chatbot"] { display: none; }
+.slide:not([data-step="0"]) .ws-nodo [data-modo="agente"] { display: inline; }
+.ws-vueltas { display: grid; grid-template-columns: 520px 1fr; column-gap: 48px; row-gap: 10px; align-items: start; margin-top: -70px; }
+.ws-vueltas-in { display: grid; gap: 10px; font: 500 34px/1.25 var(--sans); color: var(--ink); }
+.ws-vueltas table { border-collapse: collapse; font: 500 28px/1.25 var(--sans); }
+.ws-vueltas th { padding: 0 24px 10px 0; text-align: left; font: 700 20px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--peri); border-bottom: 1.5px dashed var(--rule); }
+.ws-vueltas td { padding: 10px 24px 0 0; color: var(--yellow); vertical-align: baseline; }
+.ws-vueltas td:first-child { color: var(--peri); }
+.ws-vueltas td code { color: var(--ink); }
+.ws-vueltas tr[data-fin] td { color: var(--ink); }
+.ws-vueltas tr[data-fin] td code { color: var(--peri); font-style: italic; }
+.ws-vueltas-nota { grid-column: 1 / -1; font: 400 26px/1.3 var(--sans); color: var(--body); }
+.ws-loop-caja { transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); transform-origin: top left; }
+.slide[data-step="4"] .ws-loop-caja { transform: scale(0.8); }
+.ws-nota-u { margin: 14px 0 12px; font: 400 26px/1.2 var(--mono); color: var(--body); }
+.ws-nota-u b { color: var(--yellow); }
+.ws-reglas-cab { display: grid; grid-template-columns: 150px 400px 1fr 1.2fr; gap: 36px; padding: 0 0 12px; }
+.ws-reglas-cab span { font: 700 20px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--peri); }
+.ws-lista li[data-de="studio"] span { color: var(--yellow); }
+.slide:not([data-step="0"]) .ws-piezas[data-studio] .ws-lista li { opacity: 1; }
+.ws-piezas[data-studio] .ws-lista b { color: var(--ink) !important; }
+/* leyenda de colores: un punto de cada color con el texto en ese mismo color, del tamaño de las descripciones */
+.ws-leyenda { display: flex; gap: 56px; padding: 0 0 20px; }
+.ws-leyenda span { display: flex; align-items: center; gap: 14px; font: 600 32px/1 var(--sans); color: var(--ink); }
+.ws-leyenda i { width: 22px; height: 22px; border-radius: 50%; background: currentColor; }
+.ws-leyenda [data-de="studio"] { color: var(--yellow); }
+.ws-pasos { list-style: none; padding: 0; display: grid; gap: 4px; }
+.ws-pasos li { display: grid; grid-template-columns: 70px 300px 1fr; grid-template-rows: auto auto; column-gap: 28px; row-gap: 8px; padding: 22px 0; border-top: 1.5px dashed var(--rule); align-items: baseline; }
+.ws-pasos span { grid-row: 1 / 3; font: 800 52px/1 var(--mono); color: var(--yellow); }
+.ws-pasos b { grid-row: 1 / 3; font: 800 40px/1.1 var(--mono); color: var(--ink); text-transform: uppercase; }
+.ws-pasos code { font: 500 30px/1.25 var(--mono); color: var(--yellow); background: none; padding: 0; }
+.ws-pasos em { font: 400 28px/1.3 var(--sans); font-style: normal; color: var(--body); }
+.ws-parte { color: var(--yellow); }
+.slide h1.ws-studio-h1 { font-size: 120px; }
+.ws-negocios b { font-size: 56px; color: var(--ink); margin-bottom: 8px; }
+.ws-negocios .bv-etq { font-size: 20px; margin-top: 8px; }
+.ws-negocios p { font: 400 32px/1.2 var(--sans); color: var(--body); }
+.ws-negocios .ws-negocio-regla { color: var(--yellow); font-weight: 600; }
+.ws-negocios > div > div { gap: 10px !important; }
+.ws-bk { display: grid; grid-template-columns: 720px 1fr; column-gap: 60px; align-items: center; margin-top: 6px; }
+.ws-bk-lista { list-style: none; padding: 0; display: grid; gap: 26px; }
+.ws-bk-lista li { transition: opacity 0.4s ease-out; }
+.ws-bk-lista li > div { display: grid; gap: 6px; }
+.ws-bk-lista b { font: 800 60px/1 var(--mono); color: var(--ink); text-transform: uppercase; transition: color 0.4s ease-out; }
+.ws-bk-lista span { font: 400 30px/1.2 var(--sans); color: var(--body); }
+.slide:is([data-step="2"], [data-step="3"]) .ws-bk-lista li { opacity: 0.35; }
+.slide[data-step="1"] .ws-bk-lista li:nth-child(1) { opacity: 1; }
+.slide[data-step="1"] .ws-bk-lista li:nth-child(1) b { color: var(--yellow); }
+.slide[data-step="2"] .ws-bk-lista li:nth-child(2) { opacity: 1; }
+.slide[data-step="2"] .ws-bk-lista li:nth-child(2) b { color: var(--yellow); }
+.slide[data-step="3"] .ws-bk-lista li:nth-child(3) { opacity: 1; }
+.slide[data-step="3"] .ws-bk-lista li:nth-child(3) b { color: var(--yellow); }
+.slide[data-step="4"] .ws-bk-lista li:nth-child(4) { opacity: 1; }
+.slide[data-step="4"] .ws-bk-lista li:nth-child(4) b { color: var(--yellow); }
+.slide[data-step="4"] .ws-bk-lista b { color: var(--yellow); }
+.slide[data-step="4"] .ws-bk-lista li { opacity: 1; }
+.ws-bk-remate-paso { grid-column: 1 / -1; }
+.ws-bk-remate { margin-top: 10px; font: 600 44px/1.15 var(--sans); color: var(--ink); }
+.ws-bk-remate em { font-style: normal; color: var(--yellow); }
+.ws-red { width: 100%; height: auto; overflow: visible; }
+.ws-red-enlace { stroke: var(--box-line); stroke-width: 2; }
+.ws-red-nodo { fill: var(--box); stroke: var(--peri); stroke-width: 2; transition: stroke 0.4s ease-out, fill 0.4s ease-out; }
+.ws-red [data-nuevo] { opacity: 0; transition: opacity 0.5s ease-out, stroke 0.4s ease-out, fill 0.4s ease-out; }
+.ws-red:not([data-paso="0"]) [data-nuevo] { opacity: 1; }
+.ws-red[data-paso="1"] .ws-red-nodo[data-nuevo] { stroke: var(--yellow); }
+.ws-red-nodo[data-punta] { fill: var(--yellow); stroke: var(--yellow); }
+.ws-red-camino { fill: none; stroke: var(--yellow); stroke-width: 4; stroke-linejoin: round; }
+.ws-red-moneda { fill: #fff; filter: drop-shadow(0 0 10px #f0b90b) drop-shadow(0 0 20px #f0b90b); }
+.ws-red-tag rect { fill: var(--yellow); }
+.ws-red-tag text { font: 700 20px var(--mono); letter-spacing: 0.1em; text-transform: uppercase; fill: var(--on-yellow); text-anchor: middle; }
+.ws-red-pie { font: 500 22px var(--mono); fill: var(--muted); text-anchor: middle; }
+.ws-red-txt { font: 600 22px var(--mono); letter-spacing: 0.1em; text-transform: uppercase; fill: var(--ink); text-anchor: middle; }
+.ws-red[data-paso="4"] .ws-red-nodo { stroke: var(--yellow); fill: #2a2208; }
+.ws-red[data-paso="4"] .ws-red-nodo[data-punta] { fill: var(--yellow); }
+@media (prefers-reduced-motion: reduce) { .ws-bk-lista li, .ws-bk-lista b, .ws-red * { transition: none; } }
+.ws-dg { width: 100%; height: auto; display: block; overflow: visible; }
+.ws-dg [data-anim] { opacity: 0; transform: translateY(16px); transition: opacity 0.5s ease-out var(--d, 0s), transform 0.7s var(--ease-roll) var(--d, 0s); }
+.ws-dg [data-anim][data-on] { opacity: 1; transform: none; }
+.ws-dg-caja { fill: var(--box); stroke: var(--box-line); stroke-width: 2; }
+.ws-dg-caja[data-ojo] { stroke: var(--yellow); }
+.ws-dg-t { font: 800 30px var(--mono); text-transform: uppercase; fill: var(--ink); text-anchor: middle; }
+.ws-dg-s { font: 400 24px var(--sans); fill: var(--body); text-anchor: middle; }
+/* las flechas se dibujan (pathLength 1) y la punta aparece cuando el trazo llega; la punteada camina */
+.ws-dg-flecha { fill: none; stroke: var(--yellow); stroke-width: 3; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.6s ease-out var(--d, 0s); }
+[data-on] > .ws-dg-flecha { stroke-dashoffset: 0; }
+.ws-dg-flecha[data-punteada] { stroke: var(--peri); stroke-dasharray: 10 8; stroke-dashoffset: 0; }
+[data-on] > .ws-dg-flecha[data-punteada] { animation: ws-camina 0.8s linear infinite; }
+@keyframes ws-camina { to { stroke-dashoffset: 18; } }
+.ws-dg-punta { fill: var(--yellow); opacity: 0; transition: opacity 0.2s linear calc(var(--d, 0s) + 0.55s); }
+.ws-dg-punta[data-punteada] { fill: var(--peri); }
+[data-on] > .ws-dg-punta { opacity: 1; }
+.ws-dg-etq, .ws-dg-ok { font: 700 22px var(--mono); letter-spacing: 0.08em; text-transform: uppercase; fill: var(--yellow); text-anchor: middle; }
+.ws-dg-erc { font: 800 56px var(--mono); fill: var(--yellow); }
+.ws-dg-que { font: 700 22px var(--mono); letter-spacing: 0.12em; text-transform: uppercase; fill: var(--ink); }
+/* la moneda viaja de caja en caja después de que se dibuja su flecha */
+.ws-dg-moneda { transition: transform 1.1s var(--ease-roll) 0.6s; }
+.ws-dg-moneda rect { fill: var(--yellow); }
+.ws-dg-moneda text { font: 800 24px var(--mono); fill: var(--on-yellow); text-anchor: middle; }
+/* mensajes (data-msg): blanco; la plata sigue en amarillo. Las etiquetas llevan un borde del color del fondo para leerse sobre las líneas de vida */
+.ws-dg-flecha[data-msg] { stroke: var(--ink); }
+.ws-dg-flecha[data-msg][data-punteada] { stroke: var(--peri); }
+.ws-dg-punta[data-msg] { fill: var(--ink); }
+.ws-dg-punta[data-msg][data-punteada] { fill: var(--peri); }
+.ws-dg-etq[data-msg] { fill: var(--ink); }
+.ws-dg-etq[data-msg][data-punteada] { fill: var(--body); }
+.ws-carriles .ws-dg-etq, .ws-plata .ws-dg-etq { text-transform: none; letter-spacing: 0.01em; font-weight: 600; paint-order: stroke; stroke: var(--bg); stroke-width: 10px; stroke-linejoin: round; }
+.ws-dg-vida { fill: none; stroke: var(--box-line); stroke-width: 2; stroke-dasharray: 6 8; }
+.ws-dg-vida[data-ojo] { stroke: #f0b90b55; }
+/* Dos formas de cobrar: dos diagramas de secuencia lado a lado, cada uno con su sigla arriba y su "para qué" abajo */
+.ws-cobros { display: grid; grid-template-columns: 1fr 1fr; column-gap: 80px; row-gap: 28px; }
+.ws-cobro { display: grid; gap: 18px; }
+.ws-cobro-cab { display: flex; align-items: baseline; gap: 20px; padding-bottom: 14px; border-bottom: 1.5px dashed var(--rule); }
+.ws-cobro-cab b { font: 800 56px/1 var(--mono); color: var(--yellow); }
+.ws-cobro-cab span { font: 700 24px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink); }
+.ws-cobro-para p { display: grid; gap: 8px; font: 500 32px/1.25 var(--sans); color: var(--ink); }
+/* La custodia, por dentro: el reloj de 24 h se llena (2,4 s) y recién ahí la flecha sigue a COMPLETED */
+.ws-dg-quien { font: 400 20px var(--sans); fill: var(--muted); text-anchor: middle; }
+.ws-dg-rama { font: 600 24px var(--sans); fill: var(--body); }
+.ws-dg-reloj-fondo { fill: var(--box); stroke: var(--box-line); stroke-width: 8; }
+.ws-dg-reloj { fill: none; stroke: var(--yellow); stroke-width: 8; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.2s linear 0.4s; }
+[data-on] > .ws-dg-reloj { stroke-dashoffset: 0; }
+.ws-dg-reloj-t { font: 800 26px var(--mono); fill: var(--yellow); text-anchor: middle; }
+/* ¿Me llegó la plata?: la captura se tacha con dos trazos y la respuesta aparece como una burbuja amarilla */
+.ws-dg-tacha { fill: none; stroke: var(--yellow); stroke-width: 6; stroke-linecap: round; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 0.4s ease-out; }
+[data-on] > .ws-dg-tacha { stroke-dashoffset: 0; }
+.ws-dg-respuesta rect { fill: var(--yellow); }
+.ws-dg-respuesta text { font: 700 32px var(--sans); fill: var(--on-yellow); text-anchor: middle; }
+.ws-plata-chip { margin-top: 24px; font-size: 28px; }
+/* Claude Code: la capa que falta va tachada */
+.ws-lista li[data-de="falta"] b { text-decoration: line-through 4px var(--yellow); }
+.ws-lista li[data-de="falta"] span { color: var(--yellow); }
+.ws-claude-remate { margin-top: 18px; }
+@media (prefers-reduced-motion: reduce) {
+  .ws-dg [data-anim], .ws-dg-flecha, .ws-dg-punta, .ws-dg-moneda, .ws-dg-reloj, .ws-dg-tacha { transition: none; }
+  [data-on] > .ws-dg-flecha[data-punteada] { animation: none; }
+}
+.ws-celda { display: grid; }
+.ws-celda > * { grid-area: 1 / 1; }
+.ws-nodo[data-chatbot] { transition: opacity 0.5s ease-out, transform 0.5s ease-out; }
+.slide:not([data-step="0"]) .ws-nodo[data-chatbot] { opacity: 0; transform: translateY(-24px); pointer-events: none; }
+.ws-loop-modo { position: absolute; right: 0; top: -150px; display: grid; justify-items: end; gap: 6px; text-align: right; transition: opacity 0.5s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+.ws-loop-modo b { font: 800 64px/1 var(--mono); color: var(--peri); text-transform: uppercase; }
+.ws-loop-modo span { font: 400 30px/1.2 var(--sans); color: var(--body); }
+.ws-loop-modo[data-cual="agente"] { opacity: 0; transform: translateY(16px); }
+.ws-loop-modo[data-cual="agente"] b { color: var(--yellow); }
+.slide:not([data-step="0"]) .ws-loop-modo[data-cual="chatbot"] { opacity: 0; transform: translateY(-16px); }
+.slide:not([data-step="0"]) .ws-loop-modo[data-cual="agente"] { opacity: 1; transform: none; }
+.ws-nodo[data-chatbot] { border-style: dashed; }
 /* la caja literal: rectángulo que se dibuja alrededor de los tres límites */
 .ws-caja { position: relative; padding: 48px 56px; }
 .ws-caja > svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .ws-caja rect { stroke: var(--yellow); }
+.ws-caja { padding: 18px 40px 10px; margin-top: 22px; }
+.ws-caja-cab, .ws-caja-filas li { display: grid; grid-template-columns: 560px 60px 1fr; align-items: baseline; }
+.ws-caja-cab span { font: 700 20px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--peri); padding-bottom: 10px; }
+.ws-caja-filas { list-style: none; padding: 0; }
+.ws-caja-filas li { padding: 7px 0; border-top: 1.5px dashed var(--rule); }
+.ws-caja-filas em { font: italic 400 28px/1.2 var(--sans); color: var(--peri); }
+.ws-caja-filas b { font: 500 32px/1 var(--mono); color: var(--yellow); }
+.ws-caja-filas span { font: 600 32px/1.2 var(--sans); color: var(--ink); }
+.ws-pedido-cliente { display: grid; gap: 8px; margin-top: 4px; }
+.ws-pedido-cliente p { font: 600 40px/1.2 var(--sans); color: var(--ink); }
+.ws-pedido-cliente em { font-style: normal; color: var(--yellow); }
 /* las piezas: la esfera a la izquierda, la lista a la derecha */
 .ws-piezas { display: grid; grid-template-columns: 560px 1fr; gap: 60px; align-items: center; }
 .ws-esfera { position: relative; aspect-ratio: 1; }
@@ -277,17 +431,50 @@ body[data-gpu] .deck, body[data-gpu] .stage { background: transparent; }
 .ws-esfera-cierre { position: absolute; right: 100px; top: 40px; width: 480px; height: 480px; }
 .ws-cierre-bajada { max-width: 1150px; }
 .ws-lista { list-style: none; padding: 0; }
-.ws-lista li { display: grid; grid-template-columns: 460px 1fr; align-items: baseline; gap: 32px; padding: 22px 0; border-top: 1.5px dashed var(--rule); }
-.ws-lista b { font: 800 44px/1.1 var(--mono); color: var(--ink); text-transform: uppercase; }
+.ws-lista li { display: grid; grid-template-columns: 460px 1fr; align-items: baseline; gap: 32px; padding: 16px 0; transition: opacity 0.4s ease-out; border-top: 1.5px dashed var(--rule); }
+.ws-lista b { font: 800 40px/1.1 var(--mono); color: var(--ink); text-transform: uppercase; transition: color 0.4s ease-out; }
+.ws-lista span { font-size: 30px !important; }
+.slide:not([data-step="0"]) .ws-piezas .ws-lista li { opacity: 0.4; }
+.slide[data-step="1"] .ws-piezas .ws-lista > div:nth-child(1) li { opacity: 1; }
+.slide[data-step="1"] .ws-piezas .ws-lista > div:nth-child(1) b { color: var(--yellow); }
+.slide[data-step="2"] .ws-piezas .ws-lista > div:nth-child(2) li { opacity: 1; }
+.slide[data-step="2"] .ws-piezas .ws-lista > div:nth-child(2) b { color: var(--yellow); }
+.slide[data-step="3"] .ws-piezas .ws-lista > div:nth-child(3) li { opacity: 1; }
+.slide[data-step="3"] .ws-piezas .ws-lista > div:nth-child(3) b { color: var(--yellow); }
+.slide[data-step="4"] .ws-piezas .ws-lista > div:nth-child(4) li { opacity: 1; }
+.slide[data-step="4"] .ws-piezas .ws-lista > div:nth-child(4) b { color: var(--yellow); }
+.slide[data-step="5"] .ws-piezas .ws-lista > div:nth-child(5) li { opacity: 1; }
+.slide[data-step="5"] .ws-piezas .ws-lista > div:nth-child(5) b { color: var(--yellow); }
+.slide[data-step="6"] .ws-piezas .ws-lista > div:nth-child(6) li { opacity: 1; }
+.slide[data-step="6"] .ws-piezas .ws-lista > div:nth-child(6) b { color: var(--yellow); }
+/* en el último paso (6) todas las capas vuelven a leerse; la malla sigue en amarillo */
+.slide[data-step="6"] .ws-piezas .ws-lista li { opacity: 1; }
 .ws-lista span { font: 400 34px/1.25 var(--sans); color: var(--body); }
 .ws-lista li code, .slide .ws-lista code { font-size: 36px; color: var(--yellow); }
 /* guardrails: número, regla, cómo. Cuando entra la regla 3, las otras dos bajan y la 3 se pinta */
 .ws-reglas { list-style: none; padding: 0; }
-.ws-reglas li { display: grid; grid-template-columns: 80px 620px 1fr; align-items: baseline; gap: 32px; padding: 24px 0; border-top: 1.5px dashed var(--rule); transition: opacity 0.6s ease-out; }
-.ws-reglas span { font: 800 52px/1 var(--mono); color: var(--yellow); }
-.ws-reglas b { font: 700 48px/1.1 var(--sans); color: var(--ink); transition: color 0.6s ease-out; }
-.ws-reglas em { font: 400 36px/1.25 var(--sans); font-style: normal; color: var(--body); }
-.slide[data-step="3"] .ws-reglas > div:not(:nth-child(3)) li, .slide[data-step="4"] .ws-reglas > div:not(:nth-child(3)) li { opacity: 0.4; }
+.ws-reglas li { display: grid; grid-template-columns: 150px 400px 1fr 1.2fr; align-items: baseline; gap: 36px; padding: 24px 0; border-top: 1.5px dashed var(--rule); transition: opacity 0.6s ease-out; }
+.ws-reglas span { font: 800 36px/1 var(--mono); color: var(--yellow); }
+.ws-reglas b { font: 700 40px/1.1 var(--sans); color: var(--ink); transition: color 0.6s ease-out; }
+.ws-reglas em { font: 400 30px/1.3 var(--sans); font-style: normal; color: var(--body); }
+.ws-reglas em:nth-of-type(1) { font-style: italic; color: var(--peri); }
+.ws-remate-fila { display: flex; align-items: center; gap: 48px; flex-wrap: wrap; }
+.ws-remate-fila .sl-remate { margin-top: 0; font-size: 64px; }
+.ws-remate-fila .ws-chip { margin-top: 0; text-decoration: none; }
+.sl-remate-chico { font-size: 44px; line-height: 1.2; }
+.sl-remate-media { font-size: 60px; line-height: 1.1; }
+.sl-remate-chico code { color: var(--ink); font-size: 40px; }
+.ws-traza { margin: 22px 0 0; font: 500 30px/1.4 var(--mono); color: var(--body); white-space: pre-wrap; }
+.ws-traza b { color: var(--yellow); font-weight: 500; }
+.ws-traza s { color: var(--peri); }
+.ws-etq-ataque { color: var(--yellow); }
+.ws-hibrido { display: flex; gap: 24px; font: 400 30px/1 var(--sans); color: var(--body); }
+.ws-hibrido span { display: flex; align-items: baseline; gap: 16px; padding: 16px 28px; border-radius: 40px; border: 2px solid var(--box-line); }
+.ws-hibrido span[data-on] { border-color: var(--yellow); }
+.ws-hibrido b { font: 700 22px/1 var(--mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--yellow); }
+.ws-tres code { font: 500 32px/1.3 var(--mono); color: var(--ink); }
+/* en el último paso (4) la tabla vuelve entera, para que la slide se lea sola */
+.slide[data-step="3"] .ws-reglas > div:not(:nth-child(3)) li { opacity: 0.4; }
 .slide[data-step="3"] .ws-reglas > div:nth-child(3) b, .slide[data-step="4"] .ws-reglas > div:nth-child(3) b { color: var(--yellow); }
 .ws-ataque { border-style: dashed; }
 /* por qué on-chain: la bajada se atenúa cuando entra la cita */
@@ -295,20 +482,39 @@ body[data-gpu] .deck, body[data-gpu] .stage { background: transparent; }
 .slide:not([data-step="0"]) .ws-atenua { opacity: 0.35; }
 .ws-cita { font-size: 64px; max-width: 1600px; }
 .ws-estandares { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; margin-top: 48px; }
-.ws-estandares > div { display: grid; gap: 14px; }
+.ws-estandares > div { display: grid; align-content: start; gap: 14px; }
 .ws-estandares b { font: 800 72px/1 var(--mono); color: var(--yellow); }
 .ws-estandares span { font: 400 36px/1.2 var(--sans); color: var(--body); }
 /* studio en una frase */
 .ws-cuatro { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+.ws-cuatro > div { display: grid; align-content: start; gap: 16px; }
+.ws-cuatro span { font: 400 28px/1.3 var(--sans); color: var(--body); }
 .ws-cuatro b { display: block; font: 800 60px/1 var(--mono); color: var(--ink); text-transform: uppercase; }
 .ws-cuatro .ws-regla { background: var(--box-line); }
 /* cierre */
 .slide h1.ws-cierre { font-size: 150px; color: var(--yellow); }
-.ws-pie { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 60px; }
+.ws-pie { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 60px; align-items: start; }
 .ws-pie > div { display: grid; gap: 16px; }
 .ws-pie .ws-regla { background: var(--box-line); margin-bottom: 12px; }
 .ws-pie b { font: 700 40px/1.1 var(--mono); color: var(--ink); overflow-wrap: anywhere; }
 
+/* Secuencia de la venta (slide 2): cabeceras arriba, SVG absoluto con líneas de vida y flechas, mensajes absolutos sobre su flecha. */
+.ws-sec-todo { position: relative; }
+.ws-sec { position: relative; width: 1680px; height: 560px; transform-origin: top left; transition: opacity 0.6s ease-out, transform 0.6s cubic-bezier(0.16, 1, 0.3, 1); }
+.ws-sec-cab { display: flex; justify-content: space-between; padding: 0 20px; }
+.ws-sec-cab .ws-nodo { min-height: 0; width: 260px; padding: 20px 24px; gap: 8px; text-align: center; justify-items: center; }
+.ws-sec-cab .ws-nodo b { font-size: 34px; }
+.ws-sec-cab .ws-nodo span { font-size: 24px; }
+.ws-sec svg { position: absolute; inset: 0; width: 1680px; height: 560px; pointer-events: none; overflow: visible; }
+.ws-sec-vida { fill: none; stroke: var(--box-line); stroke-width: 3; stroke-dasharray: 10 14; }
+.ws-sec [data-paso="3"] { stroke: var(--yellow); }
+.ws-sec-msg { position: absolute; inset: 0; pointer-events: none; }
+.ws-sec-msg-in { position: absolute; left: 320px; right: 320px; display: grid; gap: 6px; }
+.ws-sec-msg-in[data-de="v"] { justify-items: end; text-align: right; }
+.ws-sec-msg-in p { font: 500 40px/1.1 var(--sans); color: var(--ink); transition: color 0.4s ease-out; }
+.ws-sec-msg-in[data-n="3"] p { color: var(--yellow); }
+.ws-sec-msg-in[data-n="3"] .bv-etq { color: var(--yellow); }
+
 @media (prefers-reduced-motion: reduce) {
-  .ws-vs .ws-col, .ws-reglas li, .ws-reglas b, .ws-atenua, .ws-tres em { transition: none; }
+  .ws-loop-caja, .ws-lista li, .ws-lista b, .ws-loop-modo, .ws-nodo[data-chatbot], .ws-reglas li, .ws-reglas b, .ws-atenua, .ws-tres em, .ws-sec, .ws-sec-msg-in p { transition: none; }
 }

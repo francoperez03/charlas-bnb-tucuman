@@ -16,18 +16,22 @@ const RADIOS = [0.3, 0.5, 0.68, 0.85, 1.0]
 const DESCENSO = 0.8
 const CAMARA_Z = 4.6
 const ESFERA_Y = 0.4
-const CARA_Y = -Math.PI / 2 // el vértice del gajo mira a cámara: se ven sus dos caras de corte
-const INCLINACION = 0.22
+const CARA_Y = Math.PI / 4 // la bisectriz del gajo (x < 0, z > 0) queda sobre +z: el corte mira a cámara y se ven las capas
+const INCLINACION = 0.3
 const AMARILLO = '#f0b90b'
 const TINTA = '#efeee6'
 const CASCARA = '#0e0e0e'
 const EXTERIOR = '#141414'
 const CARAS = ['#f0b90b', '#efeee6', '#0b0e11', '#f0b90b', '#0b0e11']
+// Modo `tenue`: cada capa con un tono oscuro propio; solo la encendida brilla (emissive amarillo).
+const TENUES = ['#4a3a0c', '#3a3832', '#2c2618', '#3b2e10', '#26241f']
 
 export type EsferaProps = {
   encendida?: number // capa encendida: 0 LLM … 4 guardrails, 5 la malla (wallet e identidad), -1 ninguna
   gajo?: number // 0 entera, 1 el gajo caído del todo
   escala?: number
+  sinGajo?: boolean // oculta el cuarto que se desprende: queda el corte abierto sin la pieza
+  tenue?: boolean // capas oscuras y distintas; solo la encendida brilla
   onElegir?: (i: number | null) => void
 }
 
@@ -45,7 +49,7 @@ const meridiano = (r: number, f: number) =>
 
 type Mat = THREE.MeshStandardMaterial
 
-function Escena({ encendida = -1, gajo = 0, escala = 1, onElegir, animar }: EsferaProps & { animar: boolean }) {
+function Escena({ encendida = -1, gajo = 0, escala = 1, sinGajo = false, tenue = false, onElegir, animar }: EsferaProps & { animar: boolean }) {
   const raiz = useRef<THREE.Group>(null)
   const cuerpo = useRef<THREE.Group>(null)
   const cuarto = useRef<THREE.Group>(null)
@@ -99,7 +103,7 @@ function Escena({ encendida = -1, gajo = 0, escala = 1, onElegir, animar }: Esfe
     }
     // Respira apenas: ±1,2 %, ciclo de 3,2 s.
     if (cuerpo.current) cuerpo.current.scale.setScalar(animar ? 1 + 0.012 * Math.sin((t * Math.PI * 2) / 3.2) : 1)
-    if (cuarto.current) cuarto.current.position.set(0, -DESCENSO * caida, 0)
+    if (cuarto.current) cuarto.current.position.set(-0.85 * caida, -DESCENSO * caida, 0.45 * caida)
     // La malla es la capa 5: se enciende entera (amarilla y más opaca) cuando le toca.
     const malla = encendida === RADIOS.length
     geo.todas.forEach((l) => {
@@ -111,7 +115,7 @@ function Escena({ encendida = -1, gajo = 0, escala = 1, onElegir, animar }: Esfe
     mats.current.forEach((ms, i) => {
       const viva = encendida === i
       const apagada = encendida >= 0 && !viva
-      const meta = viva ? 0.6 : apagada ? 0.03 : i === 0 ? 0.6 : 0.07
+      const meta = tenue ? (viva ? 0.9 : 0) : viva ? 0.6 : apagada ? 0.03 : i === 0 ? 0.6 : 0.07
       ms.forEach((m) => { m.emissiveIntensity += (meta - m.emissiveIntensity) * (animar ? 0.1 : 1) })
     })
   })
@@ -119,9 +123,9 @@ function Escena({ encendida = -1, gajo = 0, escala = 1, onElegir, animar }: Esfe
   const material = (i: number, cara = false) => (
     <meshStandardMaterial
       ref={(m) => { if (m && !mats.current[i].includes(m)) mats.current[i].push(m) }}
-      color={i === 0 ? AMARILLO : cara ? CARAS[i] : i === RADIOS.length - 1 ? EXTERIOR : CASCARA}
+      color={tenue ? (cara || i === 0 ? TENUES[i] : i === RADIOS.length - 1 ? EXTERIOR : CASCARA) : i === 0 ? AMARILLO : cara ? CARAS[i] : i === RADIOS.length - 1 ? EXTERIOR : CASCARA}
       emissive={AMARILLO}
-      emissiveIntensity={i === 0 ? 0.6 : 0.07}
+      emissiveIntensity={tenue ? 0 : i === 0 ? 0.6 : 0.07}
       roughness={0.75}
       side={THREE.DoubleSide}
     />
@@ -143,7 +147,7 @@ function Escena({ encendida = -1, gajo = 0, escala = 1, onElegir, animar }: Esfe
         ))}
         {geo.lineas.cuerpo.map((l, k) => <primitive key={k} object={l} />)}
       </group>
-      <group ref={cuarto}>
+      <group ref={cuarto} visible={!sinGajo}>
         {RADIOS.map((r, i) => <mesh key={`p${r}`} geometry={geo.pieza[i]} {...elegir(i)}>{material(i)}</mesh>)}
         {RADIOS.map((r, i) => (
           <group key={`pc${r}`}>

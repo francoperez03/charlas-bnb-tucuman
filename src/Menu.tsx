@@ -5,7 +5,7 @@ import { CHARLAS } from './charlas'
 import { escribirURL } from './deck/state'
 
 // Sitio publicado (respaldo en GitHub Pages, ver scripts/pages.sh). Los logos vienen de la placa (assets/placa-utn/logos).
-const SITIO = 'https://francoperez03.github.io/charlas-bnb-tucuman/'
+const SITIO = 'https://charlas-bnb-tucuman.vercel.app/'
 const SPONSORS: [string, string][] = [
   ['pcn-oscuro.png', 'PCN · Programa Con Nosotros'],
   ['sistemas-1-oscuro.png', 'Ingeniería en Sistemas · UTN FRT'],

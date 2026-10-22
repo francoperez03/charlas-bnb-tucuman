@@ -5,9 +5,9 @@ import type { Accion, Pos } from './state'
 
 const TECLAS: Record<string, Accion> = { ArrowRight: 'next', ' ': 'next', PageDown: 'next', ArrowLeft: 'prev', PageUp: 'prev', Home: 'first', End: 'last' }
 
-type Props = { charla: Charla; pos: Pos; onMover: (a: Accion) => void; onSalir: () => void; onPresentador: () => void }
+type Props = { charla: Charla; pos: Pos; onMover: (a: Accion) => void; onPresentador: () => void }
 
-export function Deck({ charla, pos, onMover, onSalir, onPresentador }: Props) {
+export function Deck({ charla, pos, onMover, onPresentador }: Props) {
   const scope = useRef<HTMLDivElement>(null)
   const [montada, setMontada] = useState(pos.slide) // la slide en pantalla; va un instante detrás de pos mientras sale la anterior
   const paso = useRef(pos.step)
@@ -19,14 +19,13 @@ export function Deck({ charla, pos, onMover, onSalir, onPresentador }: Props) {
       if (e.ctrlKey || e.metaKey || e.altKey) return
       const accion = TECLAS[e.key]
       if (accion) { e.preventDefault(); onMover(accion) }
-      else if (e.key === 'Escape') onSalir()
       else if (e.repeat) return
       else if (e.key.toLowerCase() === 'f') document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen?.()
       else if (e.key.toLowerCase() === 'p') onPresentador()
     }
     addEventListener('keydown', tecla)
     return () => removeEventListener('keydown', tecla)
-  }, [onMover, onSalir, onPresentador])
+  }, [onMover, onPresentador])
 
   // La cuadrícula del fondo corre un paso por slide.
   useEffect(() => {
@@ -74,7 +73,7 @@ export function Deck({ charla, pos, onMover, onSalir, onPresentador }: Props) {
           <div className="slide" key={montada} data-step={paso.current}>{slide.contenido()}</div>
         </SlideCtx.Provider>
         <div className="hud">
-          <button type="button" className="hud-menu" onClick={onSalir}>← Charlas</button>
+          <span>{slide.acto}</span>
           <span>{charla.titulo} · <b>{pos.slide + 1}</b> / {total}</span>
         </div>
         <div className="avance" role="progressbar" aria-valuemin={1} aria-valuemax={total} aria-valuenow={pos.slide + 1} aria-label="Avance de la charla">

@@ -4,17 +4,16 @@ import type { Fondo } from './fondo'
 import { CHARLAS } from './charlas'
 import { Deck } from './deck/Deck'
 import { Presenter } from './deck/Presenter'
-import { Menu } from './Menu'
-import { acotar, escribirURL, leerURL, mover, type Accion, type Ruta } from './deck/state'
+import { acotar, escribirURL, leerURL, mover, PRINCIPAL, type Accion, type Ruta } from './deck/state'
 
 const buscar = (slug: string | null) => CHARLAS.find((c) => c.slug === slug) ?? null
 const pasosDe = (slug: string | null) => (buscar(slug)?.slides ?? []).map((s) => s.pasos ?? 0)
 
-// Lee la URL y la deja coherente: charla que no existe = menú, slide o paso fuera de rango = el más cercano.
+// Lee la URL y la deja coherente: charla que no existe = la principal, slide o paso fuera de rango = el más cercano.
 function rutaInicial(): Ruta {
   const r = leerURL(location.search)
-  const charla = buscar(r.charla)?.slug ?? null
-  return { ...r, charla, pos: charla ? acotar(r.pos, pasosDe(charla)) : { slide: 0, step: 0 } }
+  const charla = buscar(r.charla)?.slug ?? PRINCIPAL
+  return { ...r, charla, pos: acotar(r.pos, pasosDe(charla)) }
 }
 
 export default function App() {
@@ -29,7 +28,7 @@ export default function App() {
   const [fondoCtx] = useState(() => ({ set: (p: Parameters<Fondo['set']>[0]) => fondo.current?.set(p) }))
   const ultima = useRef(ruta.pos)
 
-  // Fondo animado con vgpu, uno solo para el menú y las charlas, solo si el navegador tiene WebGPU. Se carga aparte.
+  // Fondo animado con vgpu, uno solo para todas las charlas, solo si el navegador tiene WebGPU. Se carga aparte.
   useEffect(() => {
     if (!('gpu' in navigator)) return
     let vivo = true
@@ -63,7 +62,7 @@ export default function App() {
     return () => { c.close(); removeEventListener('popstate', atras) }
   }, [ir])
 
-  // Cortina amarilla entre el menú y una charla: sube tapando, cambia la vista, y se va con el borde en diagonal.
+  // Cortina amarilla al cambiar de charla: sube tapando, cambia la vista, y se va con el borde en diagonal.
   useEffect(() => {
     if (ruta.charla === vista) return
     const el = cortina.current
@@ -77,31 +76,25 @@ export default function App() {
     return () => { tl.kill(); gsap.set(el, { autoAlpha: 0 }) }
   }, [ruta.charla, ruta.presenter, vista])
 
-  // → en la última slide de una charla vuelve al menú (en el proyector; el presentador se queda).
+  // En la última slide, → se queda ahí.
   const onMover = useCallback((a: Accion) => {
     const r = actual.current
-    const pos = mover(r.pos, a, pasosDe(r.charla))
-    const alFinal = a === 'next' && pos.slide === r.pos.slide && pos.step === r.pos.step
-    ir(alFinal && !r.presenter ? { ...r, charla: null, pos: { slide: 0, step: 0 } } : { ...r, pos })
+    ir({ ...r, pos: mover(r.pos, a, pasosDe(r.charla)) })
   }, [ir])
-  const onSalir = useCallback(() => ir({ ...actual.current, charla: null, pos: { slide: 0, step: 0 } }), [ir])
-  const onElegir = useCallback((slug: string) => ir({ ...actual.current, charla: slug, pos: { slide: 0, step: 0 } }), [ir])
   const onPresentador = useCallback(() => {
     window.open(escribirURL({ ...actual.current, presenter: true }), 'presentador', 'popup,width=1280,height=800')
   }, [])
 
   if (ruta.presenter) return <Presenter charla={buscar(ruta.charla)} pos={ruta.pos} onMover={onMover} />
 
-  const charla = buscar(vista)
-  // Mientras corre la cortina hacia el menú, la charla sigue montada en la última slide que mostró.
+  const charla = buscar(vista) ?? CHARLAS[0]
+  // Mientras corre la cortina, la charla anterior sigue montada en la última slide que mostró.
   if (vista === ruta.charla) ultima.current = ruta.pos
   const pos = ultima.current
   return (
     <FondoCtx.Provider value={fondoCtx}>
       <canvas ref={lienzo} className="fondo" aria-hidden />
-      {charla
-        ? <Deck key={charla.slug} charla={charla} pos={pos} onMover={onMover} onSalir={onSalir} onPresentador={onPresentador} />
-        : <Menu onElegir={onElegir} />}
+      <Deck key={charla.slug} charla={charla} pos={pos} onMover={onMover} onPresentador={onPresentador} />
       <div ref={cortina} className="cortina" aria-hidden />
     </FondoCtx.Provider>
   )

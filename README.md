@@ -6,12 +6,12 @@ En vivo: https://charlas-bnb-tucuman.vercel.app (proyecto `charlas-bnb-tucuman` 
 
 ## Qué es
 
-Un menú con tres charlas y un deck por charla, sobre un lienzo fijo de 1920×1080 que se escala a cualquier pantalla. Bienvenidos está lista; las otras dos usan `vacias(...)`: cinco slides de relleno cada una.
+Un solo deck en la raíz del sitio (`/`, o `/?slide=N`): Bienvenidos seguida de BNB Agent Studio, fusionadas en `src/charlas/index.ts` desde el 2026-10-21. Lienzo fijo de 1920×1080 que se escala a cualquier pantalla. Sin menú: la Build session sigue en `?charla=build`. El orden y los cinco actos (La noche, El agente, Cobrar, Studio, Ahora ustedes) se arman en `index.ts`; el acto de cada slide se ve abajo a la izquierda. La slide de QR de Bienvenidos ("En las mesas") cierra la noche.
 
 | Charla | Archivo | Bloque de `agenda.md` |
 |---|---|---|
 | Bienvenidos (portada, equipo, mapa de Builder Sessions, cronograma, QR) | `src/charlas/bienvenidos.tsx` | 18:30, apertura |
-| BNB Agent Studio | `src/charlas/workshop.tsx` | 18:30 Workshop · 16 slides con esfera y coreografía propia, 2026-10-21 |
+| BNB Agent Studio | `src/charlas/workshop.tsx` | 18:30 Workshop · 18 slides con esfera y coreografía propia, 2026-10-21; Claude Code, x402 contra ERC-8183, estados del job y los dos proyectos, 2026-10-22 |
 | Build session | `src/charlas/build.tsx` | 19:00 Build session · todavía `vacias(...)`; la idea es que el paso a paso sea una skill que se le da a la gente, no un deck |
 
 Los comandos y el código no van en el deck del workshop: viven en el repo del ejemplo (`[INPUT]`, constante `REPO` en `workshop.tsx`) y en la skill de la build session.
@@ -33,7 +33,6 @@ npm run build
 | Inicio / Fin | Primera y última slide |
 | F | Pantalla completa |
 | P | Abre el modo presentador en otra ventana |
-| Esc | Vuelve al menú |
 
 El modo presentador muestra la slide actual, la siguiente, un cronómetro y el guion, y se mueve junto con la ventana del proyector (canal `charlas-bnb`).
 
@@ -70,7 +69,7 @@ Necesita PIL y numpy. Las esquinas de la tapa están medidas a mano en el script
 
 ## Esfera
 
-`src/esfera/` es el agente en 3D (port de `AgentSphere.tsx` de la landing 2 de Crisol, con three y R3F 8, en su propio chunk). Cinco capas anidadas, de adentro hacia afuera: LLM, prompt, herramientas, memoria, guardrails. La malla de meridianos y paralelos es la wallet e identidad. Props: `encendida` (0 LLM … 4 guardrails, 5 la malla, -1 ninguna), `gajo` (0 entera, 1 el cuarto de adelante caído del todo, deja ver las capas cortadas), `escala`, `onElegir` (hover por capa). Está en el menú, la portada, las piezas (se enciende la capa del paso), las piezas en archivos (se desarma con cada paso) y el cierre. En las miniaturas del presentador y con reduced motion no gira ni respira.
+`src/esfera/` es el agente en 3D (port de `AgentSphere.tsx` de la landing 2 de Crisol, con three y R3F 8, en su propio chunk). Cinco capas anidadas, de adentro hacia afuera: LLM, prompt, herramientas, memoria, guardrails. La malla de meridianos y paralelos es la wallet e identidad. Props: `encendida` (0 LLM … 4 guardrails, 5 la malla, -1 ninguna), `gajo` (0 entera, 1 el cuarto de adelante caído del todo, deja ver las capas cortadas), `escala`, `onElegir` (hover por capa). Está en la portada, las piezas (se enciende la capa del paso), las piezas en archivos (se desarma con cada paso) y el cierre. En las miniaturas del presentador y con reduced motion no gira ni respira.
 
 ## Fondo
 

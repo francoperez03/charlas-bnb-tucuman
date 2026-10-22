@@ -28,7 +28,7 @@ const PAISES = new Set(SESIONES.map((s) => s.pais)).size
 
 // Cronograma de la noche: [inicio, fin, bloque]. Los nombres de las charlas son los del menú.
 const HOY: [string, string, string][] = [
-  ['18:00', '18:30', 'Puertas'], ['18:30', '19:00', 'BNB Agent Studio'], ['19:00', '21:00', 'Build session'],
+  ['18:00', '18:30', 'Ingreso'], ['18:30', '19:00', 'BNB Agent Studio'], ['19:00', '21:00', 'Build session'],
   ['21:00', '21:30', 'Pitch de equipos'], ['21:30', '21:40', 'Cierre'],
 ]
 const min = (h: string) => { const [a, b] = h.split(':').map(Number); return a * 60 + b }
@@ -90,7 +90,7 @@ function Latam() {
         </div>
         <div className="bv-latam-b">
           <span className="bv-etq">Hoy · sesión {hechas + 1} de {SESIONES.length}</span>
-          <p>Le toca a <b>Tucumán</b>. Después, Lima y Santiago.</p>
+          <p>Le toca a <b>Tucumán</b>.</p>
         </div>
         <ol className="bv-sesiones">
           {SESIONES.map((s, i) => (
@@ -145,7 +145,7 @@ export const bienvenidos: Charla = {
   slides: [
     {
       titulo: 'Portada',
-      notas: 'Buenas noches a todos. Gracias por venir.\n\nEsto es BNB Builder Session, edición Tucumán. Lo armamos con BNB Chain LatAm, PCN y la UTN.\n\nEl QR de arriba a la derecha abre estas mismas slides en el celu.',
+      notas: '¿Se acuerdan de la mano levantada del principio? (pausa) A las 21, esa persona de su familia puede tener un agente que le venda mientras ella atiende lo suyo.\n\n[INPUT Franco: la frase que querés que se lleven.]\n\nNos encuentran en las mesas. Los QR son para seguirnos y escribirnos cuando quieran, también después de hoy.\n\nA construir.',
       contenido: () => (
         <div className="bv bv-portada">
           <p className="kicker" data-in>Jueves 22 de octubre · UTN FRT · Tucumán</p>
@@ -171,7 +171,7 @@ export const bienvenidos: Charla = {
     },
     {
       titulo: 'Quiénes somos',
-      notas: 'Nos presentamos rápido. Cualquier duda de la noche, nos buscan a cualquiera de los tres. Los QR para seguirnos están al final.',
+      notas: 'Somos tres, y los tres estuvimos del lado de ustedes.\n\n[INPUT Franco: por qué hacemos esto en Tucumán, en una o dos frases tuyas.]\n\n[INPUT Franco: un momento tuyo de "construí algo y funcionó", en una frase.]\n\nAlejo y Nacho van a andar por las mesas toda la noche. Cualquier traba, nos buscan.\n\nY esto que hacemos hoy viene de lejos.',
       contenido: () => (
         <div className="bv">
           <h1><WordsIn text="Quiénes somos" /></h1>
@@ -182,7 +182,7 @@ export const bienvenidos: Charla = {
     {
       titulo: 'Builder Sessions en Latinoamérica',
       pasos: 1,
-      notas: 'BNB Chain LatAm viene recorriendo la región con estas sesiones: Buenos Aires, Córdoba, Lima, Cochabamba, Mar del Plata, Salta, Santa Cruz, Montevideo y Mendoza.\n\n→ Hoy le toca a Tucumán. Después siguen Lima otra vez y Santiago.\n\nLa idea en todas es la misma: una noche, un agente que compra, vende y cobra, hecho por ustedes.',
+      notas: 'Esto ya pasó en nueve ciudades. Buenos Aires, Córdoba, Lima, Cochabamba, Mar del Plata, Salta, Santa Cruz, Montevideo, Mendoza. En cada una, una sala como esta y una noche para construir.\n\n[INPUT si hay: algo que salió de una sesión anterior, un proyecto o una persona.]\n\n→ Hoy el punto amarillo es Tucumán. (pausa) Y lo que pase en este mapa esta noche depende de esta sala.\n\nAsí va a ser la noche.',
       contenido: () => (
         <div className="bv">
           <h1><WordsIn text="Builder Sessions" /></h1>
@@ -192,7 +192,7 @@ export const bienvenidos: Charla = {
     },
     {
       titulo: 'Hoy',
-      notas: 'Así sigue la noche. Primero una introducción corta a BNB Agent Studio, la herramienta con la que vamos a construir. Después dos horas de build session con mentoría por mesa. A las 21, los equipos que quieran muestran lo que tienen en 2 minutos, y cerramos.\n\nArrancamos con BNB Agent Studio.',
+      notas: 'Así sigue la noche.\n\nAhora, media hora para entender qué vamos a construir: un agente que vende. Después dos horas de construir, con nosotros en las mesas.\n\nA las 21, los equipos que quieran muestran lo que hicieron, en dos minutos. (pausa) A las 21 va a existir algo que ahora no existe. Y lo van a haber hecho ustedes.\n\nArrancamos.',
       contenido: () => (
         <div className="bv">
           <h1><WordsIn text="Hoy" /></h1>
@@ -202,7 +202,7 @@ export const bienvenidos: Charla = {
             </div>
             <ol>
               {HOY.map(([ini, fin, nombre], i) => (
-                <li key={ini} className={i === 0 ? 'bv-ahora' : undefined}>
+                <li key={ini} className={i === 1 ? 'bv-ahora' : undefined}>
                   <span className="bv-dia-ini">{ini}</span>
                   <span className="bv-dia-nombre">{nombre}</span>
                   <span className="bv-dia-pista"><i style={{ left: `${pct(ini)}%`, width: `${pct(fin) - pct(ini)}%` }} /></span>
@@ -214,11 +214,14 @@ export const bienvenidos: Charla = {
       ),
     },
     {
-      titulo: 'Bienvenidos',
-      notas: '¡Bienvenidos! Si quieren seguirnos, escaneen el QR de cada uno.\n\n→ vuelve al menú para abrir BNB Agent Studio.',
+      titulo: 'En las mesas',
+      notas: '¿Se acuerdan de la mano levantada del principio? (pausa) A las 21, quiero ver más manos.\n\n[INPUT Franco: la frase que querés que se lleven.]\n\nBienvenidos. Los QR son para seguirnos, escríbannos cuando quieran, también después de hoy.\n\n→ sigue BNB Agent Studio.',
       contenido: () => (
         <div className="bv bv-cierre">
-          <h1><WordsIn text="Bienvenidos" /></h1>
+          <div>
+            <h1><WordsIn text="En las mesas" /></h1>
+            <p className="bv-bajada bv-gap-s" data-in>A las 21, el negocio de tu familia <span className="bv-ojo">puede tener un agente que vende</span>.</p>
+          </div>
           <Qrs />
         </div>
       ),

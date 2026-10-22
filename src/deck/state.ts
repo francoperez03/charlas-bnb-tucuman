@@ -5,6 +5,9 @@ export type Pos = { slide: number; step: number } // slide desde 0
 export type Ruta = { charla: string | null; pos: Pos; presenter: boolean }
 export type Accion = 'next' | 'prev' | 'first' | 'last'
 
+// La charla que abre la raíz: sin ?charla= en la URL, es esta.
+export const PRINCIPAL = 'bienvenidos'
+
 // pasos[i] = cuántos pasos tiene la slide i (0 = ninguno).
 export function mover(pos: Pos, accion: Accion, pasos: number[]): Pos {
   const ultima = pasos.length - 1
@@ -29,7 +32,7 @@ const entero = (v: string | null) => (v !== null && /^\d+$/.test(v) ? Number(v) 
 export function leerURL(search: string): Ruta {
   const q = new URLSearchParams(search)
   return {
-    charla: q.get('charla'),
+    charla: q.get('charla') ?? PRINCIPAL,
     pos: { slide: Math.max((entero(q.get('slide')) ?? 1) - 1, 0), step: entero(q.get('step')) ?? 0 },
     presenter: q.get('presenter') === '1',
   }
@@ -37,11 +40,9 @@ export function leerURL(search: string): Ruta {
 
 export function escribirURL(r: Ruta): string {
   const q = new URLSearchParams()
-  if (r.charla) {
-    q.set('charla', r.charla)
-    q.set('slide', String(r.pos.slide + 1))
-    if (r.pos.step > 0) q.set('step', String(r.pos.step))
-  }
+  if (r.charla && r.charla !== PRINCIPAL) q.set('charla', r.charla)
+  if (r.pos.slide > 0 || r.pos.step > 0 || q.has('charla')) q.set('slide', String(r.pos.slide + 1))
+  if (r.pos.step > 0) q.set('step', String(r.pos.step))
   if (r.presenter) q.set('presenter', '1')
   const s = q.toString()
   return s ? `?${s}` : location.pathname
@@ -59,4 +60,6 @@ if (import.meta.env.DEV) {
   igual(acotar({ slide: 9, step: 9 }, pasos), { slide: 2, step: 0 }, 'acotar mete la posición en rango')
   const r: Ruta = { charla: 'solana', pos: { slide: 2, step: 1 }, presenter: true }
   igual(leerURL(escribirURL(r)), r, 'la URL ida y vuelta da la misma ruta')
+  igual(escribirURL({ charla: PRINCIPAL, pos: { slide: 0, step: 0 }, presenter: false }), location.pathname, 'la primera slide de la principal es la raíz')
+  igual(leerURL('').charla, PRINCIPAL, 'la raíz abre la principal')
 }

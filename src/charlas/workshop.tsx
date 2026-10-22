@@ -27,7 +27,7 @@ const NEGOCIOS: [string, string, string][] = [
 // El chat de una rotisería: [quién, qué]. La dueña responde lo mismo todos los días.
 const CHATS: ['c' | 'v', string][] = [
   ['c', '¿Cuánto están las empanadas?'], ['v', '1,5 U cada una'],
-  ['c', '¿Tenés 3?'], ['v', 'Sí, quedan 24'],
+  ['c', '¿Tenés 3?'], ['v', 'Sí (quedan 24)'],
   ['c', '¿Cómo te pago?'], ['v', 'Te paso el alias…'],
 ]
 
@@ -560,7 +560,7 @@ const slides: Slide[] = [
   // ─── Parte 1 · Agentes, en abstracto ───
   {
     titulo: 'Portada',
-    notas: `La esfera es un agente. Durante media hora la vamos a ir abriendo, capa por capa.\n\nUn agente que vende y, del otro lado, uno que compra.\n\nEl repo del ejemplo está en pantalla: clónenlo ahora mientras hablo. ${REPO}\n\nVolvamos a la persona de la mano levantada.`,
+    notas: `La esfera es un agente. Durante media hora la vamos a ir abriendo, capa por capa.\n\nUn agente que vende y, del otro lado, uno que compra.\n\nVolvamos a la persona de la mano levantada.`,
     coreografia: (_r, tl) => { tl.from('.ws-esfera-portada', { scale: 0, autoAlpha: 0, duration: 1.6, ease: 'expo.out' }, 0) },
     contenido: () => (
       <div className="bv sl-portada">
@@ -568,7 +568,6 @@ const slides: Slide[] = [
         <p className="kicker" data-in>Media hora · qué es un agente</p>
         <h1><Chars text="BNB Agent Studio" /></h1>
         <p className="bv-bajada" data-in>Un agente que vende. Un agente que compra.</p>
-        <p className="ws-chip" data-in>{REPO}</p>
       </div>
     ),
   },

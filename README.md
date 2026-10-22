@@ -69,7 +69,7 @@ Necesita PIL y numpy. Las esquinas de la tapa están medidas a mano en el script
 
 ## Esfera
 
-`src/esfera/` es el agente en 3D (port de `AgentSphere.tsx` de la landing 2 de Crisol, con three y R3F 8, en su propio chunk). Cinco capas anidadas, de adentro hacia afuera: LLM, prompt, herramientas, memoria, guardrails. La malla de meridianos y paralelos es la wallet e identidad. Props: `encendida` (0 LLM … 4 guardrails, 5 la malla, -1 ninguna), `gajo` (0 entera, 1 el cuarto de adelante caído del todo, deja ver las capas cortadas), `escala`, `onElegir` (hover por capa). Está en la portada, las piezas (se enciende la capa del paso), las piezas en archivos (se desarma con cada paso) y el cierre. En las miniaturas del presentador y con reduced motion no gira ni respira.
+`src/esfera/` es el agente en 3D (port de `AgentSphere.tsx` de la landing 2 de Crisol, con three y R3F 8, en su propio chunk). Cinco cáscaras anidadas, de adentro hacia afuera: LLM; system prompt y tools (misma cáscara, mitad de arriba y mitad de abajo); memoria; guardrails; wallet e identidad, que enciende también la malla. Props: `encendida` (0 LLM, 1 prompt, 2 tools, 3 memory, 4 guardrails, 5 wallet e identidad, -1 ninguna), `gajo` (0 entera, 1 el cuarto de adelante caído del todo, deja ver las capas cortadas), `escala`, `onElegir` (hover por capa). Está en la portada, las piezas (se enciende la capa del paso), las piezas en archivos (se desarma con cada paso) y el cierre. En las miniaturas del presentador y con reduced motion no gira ni respira.
 
 ## Fondo
 

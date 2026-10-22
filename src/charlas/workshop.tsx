@@ -45,7 +45,7 @@ const VUELTAS: [string, string, string][] = [
   ['3', 'ninguna: ya tiene todo, responde', '"3 empanadas, 4,05 U con descuento"'],
 ]
 
-// Las capas del agente, en abstracto, de adentro hacia afuera: [capa, qué es]. Mismo orden que la esfera (0 LLM … 5 la malla).
+// Las capas del agente, en abstracto, de adentro hacia afuera: [capa, qué es]. Mismo orden que la esfera (0 LLM … 5 wallet e identidad).
 const PIEZAS: [string, string][] = [
   ['LLM', 'el modelo: lee el contexto y decide; cualquiera con tool calling'],
   ['System prompt', 'quién es, qué vende, cómo habla'],
@@ -65,7 +65,7 @@ const PIEZAS_STUDIO: [string, string, 'studio' | 'vos'][] = [
   ['Wallet + identity', 'la firma de pagos es código fijo, nunca una tool; ERC-8004', 'studio'],
 ]
 
-// Las mismas capas en Claude Code: tiene las cinco de adentro y le falta la malla. Es el puente a Studio.
+// Las mismas capas en Claude Code: tiene todas las de adentro y le falta la de afuera. Es el puente a Studio.
 const PIEZAS_CLAUDE: [string, string, 'falta'?][] = [
   ['LLM', 'Claude: lee el contexto y decide'],
   ['System prompt', 'el CLAUDE.md: quién es y cómo trabaja'],
@@ -390,9 +390,9 @@ function Columna({ t, d, e, mono }: { t: string; d: string; e?: string; mono?: b
   return <div><i className="ws-regla" data-regla /><b>{t}</b>{mono ? <code>{d}</code> : <span>{d}</span>}{e && <em>{e}</em>}</div>
 }
 
-// Las capas: la esfera abierta a la izquierda, se enciende solo la capa del paso (1 LLM … 6 la malla); la lista a la derecha.
+// Las capas: la esfera abierta a la izquierda, se enciende solo la capa del paso (1 LLM … 6 wallet e identidad); la lista a la derecha.
 // Con `studio`, cada fila dice quién la pone: amarillo lo que trae Studio, blanco lo que definís vos.
-// Con `claude`, las capas de Claude Code: en el último paso la malla queda apagada, porque es la que le falta.
+// Con `claude`, las capas de Claude Code: en el último paso la cáscara de afuera queda apagada, porque es la que le falta.
 function Piezas({ studio, claude }: { studio?: boolean; claude?: boolean }) {
   const { step } = useContext(SlideCtx)
   const filas: [string, string, ('studio' | 'vos' | 'falta')?][] = studio ? PIEZAS_STUDIO : claude ? PIEZAS_CLAUDE : PIEZAS
@@ -620,7 +620,7 @@ const slides: Slide[] = [
   {
     titulo: 'Las capas',
     pasos: 6,
-    notas: 'La esfera es el agente, abierta: cada capa es una pieza, de adentro hacia afuera. Se ilumina solo la que nombramos.\n\n→ El núcleo, el LLM: lee el contexto y decide. Sirve cualquier modelo que soporte tool calling.\n\n→ El system prompt: quién es, qué vende, cómo habla. Texto.\n\n→ Las tools: las acciones que el modelo puede pedir. Ver stock, cotizar, cobrar.\n\n→ La memory: lo que recuerda entre un mensaje y otro. El catálogo y el pedido en curso.\n\n→ Los guardrails: reglas que corren en el código antes de ejecutar una tool. Al prompt se lo puede convencer; al código, no.\n\n→ Y la malla de afuera: wallet e identidad. La wallet guarda una clave privada. Firmar es usar esa clave para autorizar un pago: sin firma, la plata no se mueve. La identidad dice quién es el agente on-chain. Un agente con casi todas estas capas ya lo usaron.',
+    notas: 'La esfera es el agente, abierta: cada capa es una pieza, de adentro hacia afuera. Se ilumina solo la que nombramos.\n\n→ El núcleo, el LLM: lee el contexto y decide. Sirve cualquier modelo que soporte tool calling.\n\n→ El system prompt: quién es, qué vende, cómo habla. Texto. Ocupa la mitad de arriba de una capa.\n\n→ Las tools, en la mitad de abajo de la misma capa: las acciones que el modelo puede pedir. Ver stock, cotizar, cobrar. Van juntas porque las dos son la parte fija del contexto: el modelo las lee completas en cada vuelta.\n\n→ La memory: lo que recuerda entre un mensaje y otro. El catálogo y el pedido en curso.\n\n→ Los guardrails: reglas que corren en el código antes de ejecutar una tool. Al prompt se lo puede convencer; al código, no.\n\n→ Y la capa de afuera: wallet e identidad. La wallet guarda una clave privada. Firmar es usar esa clave para autorizar un pago: sin firma, la plata no se mueve. La identidad dice quién es el agente on-chain. Un agente con casi todas estas capas ya lo usaron.',
     contenido: () => (
       <div className="bv">
         <h1><WordsIn text="Las capas" /></h1>
@@ -631,7 +631,7 @@ const slides: Slide[] = [
   {
     titulo: 'Claude Code es un agente',
     pasos: 6,
-    notas: 'Claude Code. Muchos lo usan todos los días. Es un agente: recibe un objetivo, decide, llama a una herramienta, lee el resultado y vuelve a decidir. El mismo loop de recién. Veamos sus capas.\n\n→ El LLM: Claude.\n\n→ El system prompt: el CLAUDE.md del proyecto. Ahí le decís quién es y cómo trabaja.\n\n→ Las tools: leer y editar archivos, correr comandos.\n\n→ La memory: el proyecto y lo que guarda entre sesiones.\n\n→ Los guardrails: los permisos. Antes de algo delicado, te pregunta.\n\n→ Y la malla queda apagada. No tiene wallet ni identidad: decide y actúa, pero no puede cobrar ni pagar. Esa capa la agregamos hoy. Y apenas le das una wallet, la pregunta obligada es qué puede salir mal.',
+    notas: 'Claude Code. Muchos lo usan todos los días. Es un agente: recibe un objetivo, decide, llama a una herramienta, lee el resultado y vuelve a decidir. El mismo loop de recién. Veamos sus capas.\n\n→ El LLM: Claude.\n\n→ El system prompt: el CLAUDE.md del proyecto. Ahí le decís quién es y cómo trabaja.\n\n→ Las tools: leer y editar archivos, correr comandos.\n\n→ La memory: el proyecto y lo que guarda entre sesiones.\n\n→ Los guardrails: los permisos. Antes de algo delicado, te pregunta.\n\n→ Y la capa de afuera queda apagada. No tiene wallet ni identidad: decide y actúa, pero no puede cobrar ni pagar. Esa capa la agregamos hoy. Y apenas le das una wallet, la pregunta obligada es qué puede salir mal.',
     contenido: () => (
       <div className="bv">
         <h1><WordsIn text="Claude Code es un agente" /></h1>

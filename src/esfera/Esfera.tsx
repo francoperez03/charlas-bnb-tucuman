@@ -6,8 +6,9 @@ import { reducedMotion } from '../motion/motion'
 
 /**
  * La esfera es el agente. Port de AgentSphere.tsx (Crisol, apps/landing2) con la identidad BNB.
- * Cinco capas anidadas, de adentro hacia afuera: LLM, prompt, herramientas, memoria, guardrails (las piezas
- * de la charla). La malla de meridianos y paralelos es la wallet e identidad: lo que la deja actuar afuera.
+ * Cinco cáscaras anidadas, de adentro hacia afuera: LLM; system prompt y tools (la misma cáscara, mitad de arriba y
+ * mitad de abajo: las dos son la parte fija del contexto); memoria; guardrails; wallet e identidad, que también
+ * enciende la malla de meridianos y paralelos.
  * Un cuarto de adelante ("gajo") se desprende con `gajo` (0..1) y deja ver las capas cortadas.
  * `encendida` enciende una capa (las otras bajan). Sin reduced motion gira apenas y respira.
  */
@@ -24,10 +25,13 @@ const CASCARA = '#0e0e0e'
 const EXTERIOR = '#141414'
 const CARAS = ['#f0b90b', '#efeee6', '#0b0e11', '#f0b90b', '#0b0e11']
 // Modo `tenue`: cada capa con un tono oscuro propio; solo la encendida brilla (emissive amarillo).
-const TENUES = ['#4a3a0c', '#3a3832', '#2c2618', '#3b2e10', '#26241f']
+const TENUES = ['#4a3a0c', '#3a3832', '#2f2c26', '#2c2618', '#3b2e10', '#26241f'] // por capa
+// Capas de cada cáscara, de arriba abajo: la cáscara 1 se parte al medio entre system prompt (1) y tools (2).
+const PARTES = [[0], [1, 2], [3], [4], [5]]
+const CAPAS_N = 6
 
 export type EsferaProps = {
-  encendida?: number // capa encendida: 0 LLM … 4 guardrails, 5 la malla (wallet e identidad), -1 ninguna
+  encendida?: number // capa encendida: 0 LLM, 1 system prompt, 2 tools, 3 memory, 4 guardrails, 5 wallet e identidad, -1 ninguna
   gajo?: number // 0 entera, 1 el gajo caído del todo
   escala?: number
   sinGajo?: boolean // oculta el cuarto que se desprende: queda el corte abierto sin la pieza
@@ -53,7 +57,7 @@ function Escena({ encendida = -1, gajo = 0, escala = 1, sinGajo = false, tenue =
   const raiz = useRef<THREE.Group>(null)
   const cuerpo = useRef<THREE.Group>(null)
   const cuarto = useRef<THREE.Group>(null)
-  const mats = useRef<Mat[][]>(RADIOS.map(() => []))
+  const mats = useRef<Mat[][]>(Array.from({ length: CAPAS_N }, () => []))
   const { camera, size, invalidate } = useThree()
   const reloj = useRef(0)
   const gajoActual = useRef(gajo)
@@ -69,9 +73,12 @@ function Escena({ encendida = -1, gajo = 0, escala = 1, sinGajo = false, tenue =
 
   const R = RADIOS[RADIOS.length - 1]
   const geo = useMemo(() => {
-    const cuerpo = RADIOS.map((r, i) => (i === 0 ? new THREE.SphereGeometry(r, 48, 32) : new THREE.SphereGeometry(r, 72, 48, Math.PI / 2, Math.PI * 1.5, 0, Math.PI)))
-    const pieza = RADIOS.map((r) => new THREE.SphereGeometry(r, 48, 32, 0, Math.PI / 2, 0, Math.PI))
-    const cara = RADIOS.map((r, i) => (i === 0 ? new THREE.CircleGeometry(r, 48, Math.PI / 2, Math.PI) : new THREE.RingGeometry(RADIOS[i - 1], r, 48, 1, Math.PI / 2, Math.PI)))
+    // Por cáscara, una entrada por parte: la parte j de n cubre la franja polar [πj/n, π(j+1)/n] y su cuarto de cara.
+    const partes = (f: (r: number, i: number, t0: number, dt: number) => THREE.BufferGeometry) =>
+      RADIOS.map((r, i) => PARTES[i].map((_, j, ps) => f(r, i, (Math.PI * j) / ps.length, Math.PI / ps.length)))
+    const cuerpo = partes((r, i, t0, dt) => (i === 0 ? new THREE.SphereGeometry(r, 48, 32) : new THREE.SphereGeometry(r, 72, 48, Math.PI / 2, Math.PI * 1.5, t0, dt)))
+    const pieza = partes((r, _i, t0, dt) => new THREE.SphereGeometry(r, 48, 32, 0, Math.PI / 2, t0, dt))
+    const cara = partes((r, i, t0, dt) => (i === 0 ? new THREE.CircleGeometry(r, 48, Math.PI / 2 + t0, dt) : new THREE.RingGeometry(RADIOS[i - 1], r, 48, 1, Math.PI / 2 + t0, dt)))
     const linea = (g: THREE.BufferGeometry, op: number, color = TINTA) => { const l = new THREE.Line(g, new THREE.LineBasicMaterial({ color, transparent: true, opacity: op })); l.userData.base = op; l.userData.amarilla = color === AMARILLO; return l }
     const lineas = {
       cuerpo: [
@@ -105,7 +112,7 @@ function Escena({ encendida = -1, gajo = 0, escala = 1, sinGajo = false, tenue =
     if (cuerpo.current) cuerpo.current.scale.setScalar(animar ? 1 + 0.012 * Math.sin((t * Math.PI * 2) / 3.2) : 1)
     if (cuarto.current) cuarto.current.position.set(-0.85 * caida, -DESCENSO * caida, 0.45 * caida)
     // La malla es la capa 5: se enciende entera (amarilla y más opaca) cuando le toca.
-    const malla = encendida === RADIOS.length
+    const malla = encendida === CAPAS_N - 1
     geo.todas.forEach((l) => {
       const m = l.material as THREE.LineBasicMaterial
       const base = l.userData.base as number
@@ -120,10 +127,11 @@ function Escena({ encendida = -1, gajo = 0, escala = 1, sinGajo = false, tenue =
     })
   })
 
-  const material = (i: number, cara = false) => (
+  // i es la cáscara (forma y color de base); c, la capa que la enciende.
+  const material = (i: number, c: number, cara = false) => (
     <meshStandardMaterial
-      ref={(m) => { if (m && !mats.current[i].includes(m)) mats.current[i].push(m) }}
-      color={tenue ? (cara || i === 0 ? TENUES[i] : i === RADIOS.length - 1 ? EXTERIOR : CASCARA) : i === 0 ? AMARILLO : cara ? CARAS[i] : i === RADIOS.length - 1 ? EXTERIOR : CASCARA}
+      ref={(m) => { if (m && !mats.current[c].includes(m)) mats.current[c].push(m) }}
+      color={tenue ? (cara || i === 0 ? TENUES[c] : i === RADIOS.length - 1 ? EXTERIOR : CASCARA) : i === 0 ? AMARILLO : cara ? CARAS[i] : i === RADIOS.length - 1 ? EXTERIOR : CASCARA}
       emissive={AMARILLO}
       emissiveIntensity={tenue ? 0 : i === 0 ? 0.6 : 0.07}
       roughness={0.75}
@@ -138,23 +146,23 @@ function Escena({ encendida = -1, gajo = 0, escala = 1, sinGajo = false, tenue =
   return (
     <group ref={raiz} rotation={[INCLINACION, CARA_Y, 0]}>
       <group ref={cuerpo}>
-        {RADIOS.map((r, i) => <mesh key={r} geometry={geo.cuerpo[i]} {...elegir(i)}>{material(i)}</mesh>)}
-        {RADIOS.map((r, i) => (
-          <group key={`c${r}`}>
-            <mesh geometry={geo.cara[i]}>{material(i, true)}</mesh>
-            <mesh geometry={geo.cara[i]} rotation={[0, Math.PI / 2, 0]}>{material(i, true)}</mesh>
+        {PARTES.map((ps, i) => ps.map((c, j) => <mesh key={c} geometry={geo.cuerpo[i][j]} {...elegir(c)}>{material(i, c)}</mesh>))}
+        {PARTES.map((ps, i) => ps.map((c, j) => (
+          <group key={`c${c}`}>
+            <mesh geometry={geo.cara[i][j]}>{material(i, c, true)}</mesh>
+            <mesh geometry={geo.cara[i][j]} rotation={[0, Math.PI / 2, 0]}>{material(i, c, true)}</mesh>
           </group>
-        ))}
+        )))}
         {geo.lineas.cuerpo.map((l, k) => <primitive key={k} object={l} />)}
       </group>
       <group ref={cuarto} visible={!sinGajo}>
-        {RADIOS.map((r, i) => <mesh key={`p${r}`} geometry={geo.pieza[i]} {...elegir(i)}>{material(i)}</mesh>)}
-        {RADIOS.map((r, i) => (
-          <group key={`pc${r}`}>
-            <mesh geometry={geo.cara[i]} {...elegir(i)}>{material(i, true)}</mesh>
-            <mesh geometry={geo.cara[i]} rotation={[0, Math.PI / 2, 0]} {...elegir(i)}>{material(i, true)}</mesh>
+        {PARTES.map((ps, i) => ps.map((c, j) => <mesh key={`p${c}`} geometry={geo.pieza[i][j]} {...elegir(c)}>{material(i, c)}</mesh>))}
+        {PARTES.map((ps, i) => ps.map((c, j) => (
+          <group key={`pc${c}`}>
+            <mesh geometry={geo.cara[i][j]} {...elegir(c)}>{material(i, c, true)}</mesh>
+            <mesh geometry={geo.cara[i][j]} rotation={[0, Math.PI / 2, 0]} {...elegir(c)}>{material(i, c, true)}</mesh>
           </group>
-        ))}
+        )))}
         {geo.lineas.pieza.map((l, k) => <primitive key={k} object={l} />)}
         {geo.lineas.caraXY.map((l, k) => <primitive key={`xy${k}`} object={l} position={[0, 0, 0.003]} />)}
         {geo.lineas.caraYZ.map((l, k) => <primitive key={`yz${k}`} object={l} position={[0.003, 0, 0]} />)}
